@@ -15,7 +15,9 @@ import { trackingItemStatusEnum, trackingItemTypeEnum } from "./enums";
 export const trackingItem = pgTable(
   "tracking_item",
   {
-    id: uuid("id").primaryKey().default(sql`gen_random_uuid()`),
+    id: uuid("id")
+      .primaryKey()
+      .default(sql`gen_random_uuid()`),
     userId: text("user_id")
       .notNull()
       .references(() => user.id, { onDelete: "cascade" }),

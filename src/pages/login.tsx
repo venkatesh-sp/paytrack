@@ -44,7 +44,8 @@ export default function LoginPage() {
       return;
     }
 
-    const returnTo = typeof router.query.returnTo === "string" ? router.query.returnTo : "/dashboard";
+    const returnTo =
+      typeof router.query.returnTo === "string" ? router.query.returnTo : "/dashboard";
     router.push(returnTo);
   }
 
@@ -55,7 +56,10 @@ export default function LoginPage() {
       footer={
         <p>
           Don&apos;t have an account?{" "}
-          <Link href="/register" className="font-medium text-foreground underline underline-offset-4">
+          <Link
+            href="/register"
+            className="text-foreground font-medium underline underline-offset-4"
+          >
             Create one
           </Link>
         </p>
@@ -94,7 +98,7 @@ export default function LoginPage() {
                   <FormLabel>Password</FormLabel>
                   <Link
                     href="/forgot-password"
-                    className="text-xs font-medium text-muted-foreground hover:text-foreground"
+                    className="text-muted-foreground hover:text-foreground text-xs font-medium"
                   >
                     Forgot password?
                   </Link>
@@ -119,7 +123,7 @@ export default function LoginPage() {
                 <FormControl>
                   <Checkbox checked={field.value} onCheckedChange={field.onChange} />
                 </FormControl>
-                <FormLabel className="text-sm font-normal text-muted-foreground">
+                <FormLabel className="text-muted-foreground text-sm font-normal">
                   Remember me for 30 days
                 </FormLabel>
               </FormItem>

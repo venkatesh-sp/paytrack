@@ -1,6 +1,11 @@
 import { and, asc, count, desc, eq, gte, lt, lte, sum } from "drizzle-orm";
 import { db } from "@/db";
-import { monthlyPayable, paymentHistory, trackingItem } from "@/db/schema";
+import {
+  lendingContact,
+  monthlyPayable,
+  paymentHistory,
+  trackingItem,
+} from "@/db/schema";
 import { currentBillingPeriod } from "@/lib/dates";
 
 function toNumber(value: string | number | null | undefined): number {
@@ -27,12 +32,17 @@ export async function getDashboardMetrics(userId: string) {
   const monthPayables = await db
     .select()
     .from(monthlyPayable)
-    .where(and(eq(monthlyPayable.userId, userId), eq(monthlyPayable.billingPeriod, period)));
+    .where(
+      and(eq(monthlyPayable.userId, userId), eq(monthlyPayable.billingPeriod, period)),
+    );
 
   const totalEmiThisMonth = monthPayables
     .filter((p) => p.category === "emi")
     .reduce((sum, p) => sum + toNumber(p.amount), 0);
-  const totalPaidThisMonth = monthPayables.reduce((sum, p) => sum + toNumber(p.paidAmount), 0);
+  const totalPaidThisMonth = monthPayables.reduce(
+    (sum, p) => sum + toNumber(p.paidAmount),
+    0,
+  );
   const totalPendingThisMonth = monthPayables
     .filter((p) => p.status !== "paid")
     .reduce((sum, p) => sum + (toNumber(p.amount) - toNumber(p.paidAmount)), 0);
@@ -84,6 +94,18 @@ export async function getDashboardMetrics(userId: string) {
     .orderBy(desc(paymentHistory.recordedAt))
     .limit(5);
 
+  const lendingBalances = await db
+    .select({ balance: lendingContact.balance })
+    .from(lendingContact)
+    .where(eq(lendingContact.userId, userId));
+
+  const totalOwedToYou = lendingBalances
+    .filter((c) => Number(c.balance) > 0)
+    .reduce((sum, c) => sum + Number(c.balance), 0);
+  const totalYouOwe = lendingBalances
+    .filter((c) => Number(c.balance) < 0)
+    .reduce((sum, c) => sum + Math.abs(Number(c.balance)), 0);
+
   const loanDistributionRaw = await db
     .select({
       type: trackingItem.type,
@@ -100,9 +122,14 @@ export async function getDashboardMetrics(userId: string) {
     totalPaidThisMonth,
     totalPendingThisMonth,
     overdueCount: overdueSummary?.overdueCount ?? 0,
+    totalOwedToYou,
+    totalYouOwe,
     upcomingPayments,
     todaysPayables,
-    recentPayments: recentPaymentsRaw.map((r) => ({ ...r.payment, payableTitle: r.payableTitle })),
+    recentPayments: recentPaymentsRaw.map((r) => ({
+      ...r.payment,
+      payableTitle: r.payableTitle,
+    })),
     loanDistribution: loanDistributionRaw.map((row) => ({
       type: row.type,
       outstanding: toNumber(row.totalOutstanding),

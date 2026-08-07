@@ -111,7 +111,11 @@ async function payTrackingItemMonths(
   }
 }
 
-async function seedManualPayable(userId: string, input: CreateManualPayableInput, pay: boolean) {
+async function seedManualPayable(
+  userId: string,
+  input: CreateManualPayableInput,
+  pay: boolean,
+) {
   const payable = await createManualPayable(userId, input);
   if (pay) {
     await recordPayment(userId, payable.id, {
@@ -263,7 +267,12 @@ async function main() {
   }
   await seedManualPayable(
     userId,
-    { category: "rent", title: "Monthly Rent", amount: "18000", dueDate: dayThisMonth(2) },
+    {
+      category: "rent",
+      title: "Monthly Rent",
+      amount: "18000",
+      dueDate: dayThisMonth(2),
+    },
     false,
   );
 
@@ -277,7 +286,10 @@ async function main() {
         category: "electricity_bill",
         title: `Electricity Bill — ${format(subMonths(now, m), "MMMM")}`,
         amount: electricityAmounts[i],
-        dueDate: format(new Date(now.getFullYear(), now.getMonth() - m, 15), "yyyy-MM-dd"),
+        dueDate: format(
+          new Date(now.getFullYear(), now.getMonth() - m, 15),
+          "yyyy-MM-dd",
+        ),
       },
       true,
     );
@@ -375,7 +387,12 @@ async function main() {
   // Miscellaneous.
   await seedManualPayable(
     userId,
-    { category: "miscellaneous", title: "Annual Gym Membership", amount: "6000", dueDate: monthsAgo(2) },
+    {
+      category: "miscellaneous",
+      title: "Annual Gym Membership",
+      amount: "6000",
+      dueDate: monthsAgo(2),
+    },
     true,
   );
 

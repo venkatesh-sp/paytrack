@@ -55,7 +55,11 @@ export function ExportButton({
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="outline" disabled={pdfLoading}>
-          {pdfLoading ? <Loader2 className="size-4 animate-spin" /> : <Download className="size-4" />}
+          {pdfLoading ? (
+            <Loader2 className="size-4 animate-spin" />
+          ) : (
+            <Download className="size-4" />
+          )}
           Export
         </Button>
       </DropdownMenuTrigger>

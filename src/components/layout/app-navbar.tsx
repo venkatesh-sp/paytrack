@@ -60,7 +60,7 @@ export function AppNavbar() {
   }
 
   return (
-    <header className="flex h-14 shrink-0 items-center gap-2 border-b bg-background/80 px-4 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="bg-background/80 supports-[backdrop-filter]:bg-background/60 flex h-14 shrink-0 items-center gap-2 border-b px-4 backdrop-blur">
       <SidebarTrigger className="-ml-1" />
       <Separator orientation="vertical" className="mr-2 h-4" />
       <Breadcrumb>
@@ -83,7 +83,7 @@ export function AppNavbar() {
           <DropdownMenuTrigger asChild>
             <button
               type="button"
-              className="ml-1 flex items-center gap-2 rounded-full outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="focus-visible:ring-ring ml-1 flex items-center gap-2 rounded-full outline-none focus-visible:ring-2"
               aria-label="Open account menu"
             >
               <Avatar className="size-8">
@@ -96,10 +96,10 @@ export function AppNavbar() {
           <DropdownMenuContent align="end" className="w-56">
             <DropdownMenuLabel className="font-normal">
               <div className="flex flex-col space-y-1">
-                <p className="text-sm font-medium leading-none">
+                <p className="text-sm leading-none font-medium">
                   {data?.user?.name ?? "Account"}
                 </p>
-                <p className="text-xs leading-none text-muted-foreground">
+                <p className="text-muted-foreground text-xs leading-none">
                   {data?.user?.email}
                 </p>
               </div>

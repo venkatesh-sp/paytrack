@@ -9,7 +9,10 @@ import {
   recordPaymentRequest,
   updatePayableRequest,
 } from "@/lib/api/payables";
-import type { CreateManualPayableInput, UpdatePayableInput } from "@/lib/validations/payable";
+import type {
+  CreateManualPayableInput,
+  UpdatePayableInput,
+} from "@/lib/validations/payable";
 import type { RecordPaymentInput } from "@/lib/validations/payment";
 import type { PaymentHistoryFilters } from "@/lib/api/payables";
 
@@ -21,7 +24,11 @@ function invalidateAll(queryClient: ReturnType<typeof useQueryClient>) {
   queryClient.invalidateQueries({ queryKey: ["dashboard-metrics"] });
 }
 
-export function usePayables(filters?: { status?: string; month?: string; category?: string }) {
+export function usePayables(filters?: {
+  status?: string;
+  month?: string;
+  category?: string;
+}) {
   return useQuery({
     queryKey: ["payables", filters ?? {}],
     queryFn: () => fetchPayables(filters),

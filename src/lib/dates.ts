@@ -21,7 +21,10 @@ export function currentBillingPeriod(): string {
   return billingPeriodOf(new Date());
 }
 
-export function parseBillingPeriod(period: string): { year: number; monthIndex0: number } {
+export function parseBillingPeriod(period: string): {
+  year: number;
+  monthIndex0: number;
+} {
   const [year, month] = period.split("-").map(Number);
   return { year, monthIndex0: month - 1 };
 }

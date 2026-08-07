@@ -10,9 +10,6 @@ export const config = {
 
 const handler = toNodeHandler(auth);
 
-export default async function authHandler(
-  req: NextApiRequest,
-  res: NextApiResponse,
-) {
+export default async function authHandler(req: NextApiRequest, res: NextApiResponse) {
   await handler(req, res);
 }

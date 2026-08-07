@@ -1,11 +1,11 @@
 import Head from "next/head";
 import Link from "next/link";
-import { ListChecks, PlusCircle } from "lucide-react";
+import { CircleDot, ListChecks, PlusCircle } from "lucide-react";
 
 import { DashboardShell } from "@/components/layout/dashboard-shell";
 import { EmptyState } from "@/components/empty-state";
+import { StatusBadge } from "@/components/status-badge";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   Table,
@@ -19,6 +19,7 @@ import { useTrackingItems } from "@/hooks/use-tracking-items";
 import {
   formatCurrency,
   formatDate,
+  trackingItemStatusIcons,
   trackingItemStatusLabels,
   trackingItemTypeLabels,
 } from "@/lib/format";
@@ -42,7 +43,7 @@ export default function TrackingItemsPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-semibold tracking-tight">Tracking Items</h1>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-muted-foreground text-sm">
             Loans, EMIs, and credit cards you&apos;re tracking.
           </p>
         </div>
@@ -114,9 +115,11 @@ export default function TrackingItemsPage() {
                     {trackingItemTypeLabels[item.type]}
                   </TableCell>
                   <TableCell>
-                    <Badge variant={statusVariant[item.status] ?? "default"}>
-                      {trackingItemStatusLabels[item.status]}
-                    </Badge>
+                    <StatusBadge
+                      variant={statusVariant[item.status] ?? "default"}
+                      icon={trackingItemStatusIcons[item.status] ?? CircleDot}
+                      label={trackingItemStatusLabels[item.status]}
+                    />
                   </TableCell>
                   <TableCell className="text-right">
                     {formatCurrency(item.monthlyEmiAmount)}

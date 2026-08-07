@@ -1,3 +1,12 @@
+import {
+  AlertTriangle,
+  CheckCircle2,
+  CircleDot,
+  Clock,
+  XCircle,
+  type LucideIcon,
+} from "lucide-react";
+
 const currencyFormatter = new Intl.NumberFormat("en-IN", {
   style: "currency",
   currency: "INR",
@@ -42,6 +51,12 @@ export const trackingItemStatusLabels: Record<string, string> = {
   closed: "Closed",
 };
 
+export const trackingItemStatusIcons: Record<string, LucideIcon> = {
+  active: CircleDot,
+  completed: CheckCircle2,
+  closed: XCircle,
+};
+
 export const payableCategoryLabels: Record<string, string> = {
   emi: "EMI",
   credit_card_bill: "Credit Card Bill",
@@ -59,4 +74,25 @@ export const payableStatusLabels: Record<string, string> = {
   pending: "Pending",
   paid: "Paid",
   overdue: "Overdue",
+};
+
+export const payableStatusIcons: Record<string, LucideIcon> = {
+  pending: Clock,
+  paid: CheckCircle2,
+  overdue: AlertTriangle,
+};
+
+export const reminderStatusLabels: Record<string, string> = {
+  sent: "Sent",
+  failed: "Failed",
+};
+
+export const reminderStatusIcons: Record<string, LucideIcon> = {
+  sent: CheckCircle2,
+  failed: AlertTriangle,
+};
+
+export const lendingTransactionTypeLabels: Record<string, string> = {
+  you_gave: "You Gave",
+  you_got: "You Got",
 };

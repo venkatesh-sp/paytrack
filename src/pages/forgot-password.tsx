@@ -18,10 +18,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import {
-  forgotPasswordSchema,
-  type ForgotPasswordInput,
-} from "@/lib/validations/auth";
+import { forgotPasswordSchema, type ForgotPasswordInput } from "@/lib/validations/auth";
 import { authClient } from "@/lib/auth-client";
 import { getServerSession } from "@/lib/session";
 
@@ -53,11 +50,11 @@ export default function ForgotPasswordPage() {
         title="Check your inbox"
         description="If an account exists for that email, a reset link is on its way."
       >
-        <div className="flex flex-col items-center gap-4 rounded-xl border bg-card p-8 text-center">
-          <span className="flex size-12 items-center justify-center rounded-full bg-primary/10 text-primary">
+        <div className="bg-card flex flex-col items-center gap-4 rounded-xl border p-8 text-center">
+          <span className="bg-primary/10 text-primary flex size-12 items-center justify-center rounded-full">
             <MailCheck className="size-6" />
           </span>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-muted-foreground text-sm">
             The link expires in 1 hour. Didn&apos;t get it? Check spam or try again.
           </p>
           <Button variant="outline" className="mt-2 w-full" asChild>
@@ -75,7 +72,10 @@ export default function ForgotPasswordPage() {
       footer={
         <p>
           Remembered it?{" "}
-          <Link href="/login" className="font-medium text-foreground underline underline-offset-4">
+          <Link
+            href="/login"
+            className="text-foreground font-medium underline underline-offset-4"
+          >
             Sign in
           </Link>
         </p>

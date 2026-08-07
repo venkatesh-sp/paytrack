@@ -160,7 +160,9 @@ export function AddPayableDialog() {
             />
             <DialogFooter>
               <Button type="submit" disabled={form.formState.isSubmitting}>
-                {form.formState.isSubmitting && <Loader2 className="size-4 animate-spin" />}
+                {form.formState.isSubmitting && (
+                  <Loader2 className="size-4 animate-spin" />
+                )}
                 Add payable
               </Button>
             </DialogFooter>

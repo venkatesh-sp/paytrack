@@ -10,9 +10,7 @@ export function fetchTrackingItems(filters?: { status?: string; type?: string })
   if (filters?.status) params.set("status", filters.status);
   if (filters?.type) params.set("type", filters.type);
   const qs = params.toString();
-  return apiFetch<{ items: TrackingItem[] }>(
-    `/api/tracking-items${qs ? `?${qs}` : ""}`,
-  );
+  return apiFetch<{ items: TrackingItem[] }>(`/api/tracking-items${qs ? `?${qs}` : ""}`);
 }
 
 export function fetchTrackingItem(id: string) {

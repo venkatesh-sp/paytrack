@@ -18,9 +18,7 @@ export async function listTrackingItems(
 ): Promise<TrackingItem[]> {
   const conditions = [eq(trackingItem.userId, userId)];
   if (filters.status) {
-    conditions.push(
-      eq(trackingItem.status, filters.status as TrackingItem["status"]),
-    );
+    conditions.push(eq(trackingItem.status, filters.status as TrackingItem["status"]));
   }
   if (filters.type) {
     conditions.push(eq(trackingItem.type, filters.type as TrackingItem["type"]));
@@ -87,13 +85,18 @@ export async function updateTrackingItem(
   const updates: Record<string, unknown> = {};
   if (input.name !== undefined) updates.name = input.name;
   if (input.type !== undefined) updates.type = input.type;
-  if (input.lenderName !== undefined) updates.lenderName = normalizeOptional(input.lenderName);
+  if (input.lenderName !== undefined)
+    updates.lenderName = normalizeOptional(input.lenderName);
   if (input.accountNumberLast4 !== undefined)
     updates.accountNumberLast4 = normalizeOptional(input.accountNumberLast4);
-  if (input.principalAmount !== undefined) updates.principalAmount = input.principalAmount;
-  if (input.interestRate !== undefined) updates.interestRate = normalizeOptional(input.interestRate);
-  if (input.monthlyEmiAmount !== undefined) updates.monthlyEmiAmount = input.monthlyEmiAmount;
-  if (input.outstandingAmount !== undefined) updates.outstandingAmount = input.outstandingAmount;
+  if (input.principalAmount !== undefined)
+    updates.principalAmount = input.principalAmount;
+  if (input.interestRate !== undefined)
+    updates.interestRate = normalizeOptional(input.interestRate);
+  if (input.monthlyEmiAmount !== undefined)
+    updates.monthlyEmiAmount = input.monthlyEmiAmount;
+  if (input.outstandingAmount !== undefined)
+    updates.outstandingAmount = input.outstandingAmount;
   if (input.tenureMonths !== undefined) updates.tenureMonths = Number(input.tenureMonths);
   if (input.emiDay !== undefined) updates.emiDay = Number(input.emiDay);
   if (input.notes !== undefined) updates.notes = normalizeOptional(input.notes);
@@ -102,9 +105,10 @@ export async function updateTrackingItem(
   if (input.startDate !== undefined || input.tenureMonths !== undefined) {
     const current = await getTrackingItemById(userId, id);
     const startDate = input.startDate ?? current.startDate;
-    const tenureMonths = input.tenureMonths !== undefined
-      ? Number(input.tenureMonths)
-      : current.tenureMonths;
+    const tenureMonths =
+      input.tenureMonths !== undefined
+        ? Number(input.tenureMonths)
+        : current.tenureMonths;
     updates.startDate = startDate;
     updates.endDate = computeEndDate(startDate, tenureMonths);
   }

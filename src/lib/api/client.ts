@@ -9,10 +9,7 @@ export class ApiError extends Error {
   }
 }
 
-export async function apiFetch<T>(
-  input: string,
-  init?: RequestInit,
-): Promise<T> {
+export async function apiFetch<T>(input: string, init?: RequestInit): Promise<T> {
   const res = await fetch(input, {
     ...init,
     headers: {

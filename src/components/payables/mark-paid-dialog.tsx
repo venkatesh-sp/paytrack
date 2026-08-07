@@ -108,7 +108,8 @@ export function MarkPaidDialog({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>
-                    Payment method <span className="text-muted-foreground">(optional)</span>
+                    Payment method{" "}
+                    <span className="text-muted-foreground">(optional)</span>
                   </FormLabel>
                   <FormControl>
                     <Input placeholder="UPI, bank transfer, card..." {...field} />
@@ -134,7 +135,9 @@ export function MarkPaidDialog({
             />
             <DialogFooter>
               <Button type="submit" disabled={form.formState.isSubmitting}>
-                {form.formState.isSubmitting && <Loader2 className="size-4 animate-spin" />}
+                {form.formState.isSubmitting && (
+                  <Loader2 className="size-4 animate-spin" />
+                )}
                 Confirm payment
               </Button>
             </DialogFooter>

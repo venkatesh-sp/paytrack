@@ -20,10 +20,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import {
-  resetPasswordSchema,
-  type ResetPasswordInput,
-} from "@/lib/validations/auth";
+import { resetPasswordSchema, type ResetPasswordInput } from "@/lib/validations/auth";
 import { authClient } from "@/lib/auth-client";
 
 export default function ResetPasswordPage() {
@@ -57,9 +54,12 @@ export default function ResetPasswordPage() {
 
   if (done) {
     return (
-      <AuthLayout title="Password updated" description="You can now sign in with your new password.">
-        <div className="flex flex-col items-center gap-4 rounded-xl border bg-card p-8 text-center">
-          <span className="flex size-12 items-center justify-center rounded-full bg-primary/10 text-primary">
+      <AuthLayout
+        title="Password updated"
+        description="You can now sign in with your new password."
+      >
+        <div className="bg-card flex flex-col items-center gap-4 rounded-xl border p-8 text-center">
+          <span className="bg-primary/10 text-primary flex size-12 items-center justify-center rounded-full">
             <CheckCircle2 className="size-6" />
           </span>
           <Button className="w-full" asChild>
@@ -71,7 +71,10 @@ export default function ResetPasswordPage() {
   }
 
   return (
-    <AuthLayout title="Set a new password" description="Choose a strong password for your account.">
+    <AuthLayout
+      title="Set a new password"
+      description="Choose a strong password for your account."
+    >
       <Head>
         <title>Reset password · PayTrack</title>
       </Head>

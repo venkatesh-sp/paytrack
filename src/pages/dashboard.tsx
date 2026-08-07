@@ -3,6 +3,8 @@ import Link from "next/link";
 import dynamic from "next/dynamic";
 import {
   AlertTriangle,
+  ArrowDownLeft,
+  ArrowUpRight,
   CalendarClock,
   CheckCircle2,
   Clock,
@@ -45,7 +47,7 @@ export default function DashboardPage({ firstName }: { firstName: string }) {
           <h1 className="text-2xl font-semibold tracking-tight">
             Welcome back, {firstName}
           </h1>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-muted-foreground text-sm">
             Here&apos;s an overview of your payments.
           </p>
         </div>
@@ -74,8 +76,8 @@ export default function DashboardPage({ firstName }: { firstName: string }) {
       )}
 
       {isLoading && (
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
-          {Array.from({ length: 6 }).map((_, i) => (
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {Array.from({ length: 8 }).map((_, i) => (
             <Skeleton key={i} className="h-24 w-full rounded-xl" />
           ))}
         </div>
@@ -83,7 +85,7 @@ export default function DashboardPage({ firstName }: { firstName: string }) {
 
       {metrics && (
         <>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
             <MetricCard
               label="Active Tracking Items"
               value={metrics.activeTrackingItems}
@@ -122,6 +124,19 @@ export default function DashboardPage({ firstName }: { firstName: string }) {
               icon={AlertTriangle}
               tone={metrics.overdueCount > 0 ? "destructive" : "default"}
             />
+            <MetricCard
+              label="Owed to You"
+              value={metrics.totalOwedToYou}
+              format={formatCurrency}
+              icon={ArrowDownLeft}
+            />
+            <MetricCard
+              label="You Owe"
+              value={metrics.totalYouOwe}
+              format={formatCurrency}
+              icon={ArrowUpRight}
+              tone={metrics.totalYouOwe > 0 ? "warning" : "default"}
+            />
           </div>
 
           <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
@@ -131,16 +146,19 @@ export default function DashboardPage({ firstName }: { firstName: string }) {
               </CardHeader>
               <CardContent>
                 {metrics.upcomingPayments.length === 0 ? (
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-muted-foreground text-sm">
                     Nothing due in the next 7 days.
                   </p>
                 ) : (
                   <ul className="space-y-3">
                     {metrics.upcomingPayments.map((p) => (
-                      <li key={p.id} className="flex items-center justify-between text-sm">
+                      <li
+                        key={p.id}
+                        className="flex items-center justify-between text-sm"
+                      >
                         <div>
                           <p className="font-medium">{p.title}</p>
-                          <p className="text-xs text-muted-foreground">
+                          <p className="text-muted-foreground text-xs">
                             Due {formatDate(p.dueDate)}
                           </p>
                         </div>
@@ -158,11 +176,14 @@ export default function DashboardPage({ firstName }: { firstName: string }) {
               </CardHeader>
               <CardContent>
                 {metrics.todaysPayables.length === 0 ? (
-                  <p className="text-sm text-muted-foreground">Nothing due today.</p>
+                  <p className="text-muted-foreground text-sm">Nothing due today.</p>
                 ) : (
                   <ul className="space-y-3">
                     {metrics.todaysPayables.map((p) => (
-                      <li key={p.id} className="flex items-center justify-between text-sm">
+                      <li
+                        key={p.id}
+                        className="flex items-center justify-between text-sm"
+                      >
                         <div>
                           <p className="font-medium">{p.title}</p>
                           <Badge variant="outline" className="mt-1">
@@ -183,18 +204,23 @@ export default function DashboardPage({ firstName }: { firstName: string }) {
               </CardHeader>
               <CardContent>
                 {metrics.recentPayments.length === 0 ? (
-                  <p className="text-sm text-muted-foreground">No payments recorded yet.</p>
+                  <p className="text-muted-foreground text-sm">
+                    No payments recorded yet.
+                  </p>
                 ) : (
                   <ul className="space-y-3">
                     {metrics.recentPayments.map((p) => (
-                      <li key={p.id} className="flex items-center justify-between text-sm">
+                      <li
+                        key={p.id}
+                        className="flex items-center justify-between text-sm"
+                      >
                         <div>
                           <p className="font-medium">{p.payableTitle}</p>
-                          <p className="text-xs text-muted-foreground">
+                          <p className="text-muted-foreground text-xs">
                             {formatDate(p.paymentDate)}
                           </p>
                         </div>
-                        <span className="font-medium text-success">
+                        <span className="text-success font-medium">
                           {formatCurrency(p.amount)}
                         </span>
                       </li>
@@ -216,7 +242,7 @@ export default function DashboardPage({ firstName }: { firstName: string }) {
               </CardHeader>
               <CardContent>
                 {metrics.loanDistribution.length === 0 ? (
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-muted-foreground text-sm">
                     Add an active tracking item to see distribution.
                   </p>
                 ) : (

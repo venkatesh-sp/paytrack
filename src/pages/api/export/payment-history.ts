@@ -21,7 +21,15 @@ export default withApiAuth(async (req, res, session) => {
     });
 
     const csv = toCsv(
-      ["Payable", "Category", "Payment Date", "Amount", "Payment Method", "Outstanding After", "Notes"],
+      [
+        "Payable",
+        "Category",
+        "Payment Date",
+        "Amount",
+        "Payment Method",
+        "Outstanding After",
+        "Notes",
+      ],
       history.map((entry) => [
         entry.payableTitle,
         payableCategoryLabels[entry.payableCategory] ?? entry.payableCategory,

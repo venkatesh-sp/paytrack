@@ -7,26 +7,26 @@ export function PaidVsPendingBar({ paid, pending }: { paid: number; pending: num
 
   return (
     <div className="space-y-4">
-      <div className="flex h-3 overflow-hidden rounded-full bg-muted">
+      <div className="bg-muted flex h-3 overflow-hidden rounded-full">
         {total > 0 && (
           <>
-            <div className="h-full bg-success" style={{ width: `${paidPct}%` }} />
-            <div className="h-full bg-warning" style={{ width: `${100 - paidPct}%` }} />
+            <div className="bg-success h-full" style={{ width: `${paidPct}%` }} />
+            <div className="bg-warning h-full" style={{ width: `${100 - paidPct}%` }} />
           </>
         )}
       </div>
       <div className="flex flex-wrap gap-6">
         <div className="flex items-center gap-2">
-          <CheckCircle2 className="size-4 text-success" />
+          <CheckCircle2 className="text-success size-4" />
           <div>
-            <p className="text-xs text-muted-foreground">Paid</p>
+            <p className="text-muted-foreground text-xs">Paid</p>
             <p className="text-sm font-medium">{formatCurrency(paid)}</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <Clock className="size-4 text-warning" />
+          <Clock className="text-warning size-4" />
           <div>
-            <p className="text-xs text-muted-foreground">Pending</p>
+            <p className="text-muted-foreground text-xs">Pending</p>
             <p className="text-sm font-medium">{formatCurrency(pending)}</p>
           </div>
         </div>

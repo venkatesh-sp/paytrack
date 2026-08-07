@@ -36,7 +36,7 @@ export function AuthLayout({
     <div className="grid min-h-svh lg:grid-cols-2">
       <div className="flex flex-col justify-between p-8 md:p-12">
         <Link href="/" className="flex items-center gap-2 font-semibold">
-          <span className="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+          <span className="bg-primary text-primary-foreground flex size-8 items-center justify-center rounded-lg">
             <Wallet className="size-4" />
           </span>
           PayTrack
@@ -50,31 +50,31 @@ export function AuthLayout({
         >
           <div className="mb-8">
             <h1 className="text-2xl font-semibold tracking-tight">{title}</h1>
-            <p className="mt-2 text-sm text-muted-foreground">{description}</p>
+            <p className="text-muted-foreground mt-2 text-sm">{description}</p>
           </div>
           {children}
         </motion.div>
 
-        <div className="text-xs text-muted-foreground">
+        <div className="text-muted-foreground text-xs">
           {footer ?? (
             <p>&copy; {new Date().getFullYear()} PayTrack. All rights reserved.</p>
           )}
         </div>
       </div>
 
-      <div className="relative hidden overflow-hidden bg-sidebar lg:block">
+      <div className="bg-sidebar relative hidden overflow-hidden lg:block">
         <div
           aria-hidden
           className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,color-mix(in_oklch,var(--primary)_25%,transparent),transparent_55%),radial-gradient(circle_at_80%_70%,color-mix(in_oklch,var(--chart-2)_20%,transparent),transparent_55%)]"
         />
         <div className="relative flex h-full flex-col justify-center gap-10 p-16">
           <div>
-            <h2 className="text-3xl font-semibold tracking-tight text-sidebar-foreground">
+            <h2 className="text-sidebar-foreground text-3xl font-semibold tracking-tight">
               Every payment, on time.
             </h2>
-            <p className="mt-3 max-w-sm text-sm text-sidebar-foreground/70">
-              PayTrack keeps your loans, EMIs, and bills organized so nothing
-              slips through the cracks.
+            <p className="text-sidebar-foreground/70 mt-3 max-w-sm text-sm">
+              PayTrack keeps your loans, EMIs, and bills organized so nothing slips
+              through the cracks.
             </p>
           </div>
 
@@ -87,16 +87,14 @@ export function AuthLayout({
                 transition={{ duration: 0.35, delay: 0.1 + i * 0.08 }}
                 className="flex items-start gap-4"
               >
-                <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-sidebar-foreground/5 text-sidebar-foreground backdrop-blur">
+                <span className="bg-sidebar-foreground/5 text-sidebar-foreground flex size-10 shrink-0 items-center justify-center rounded-xl backdrop-blur">
                   <item.icon className="size-5" />
                 </span>
                 <div>
-                  <p className="text-sm font-medium text-sidebar-foreground">
+                  <p className="text-sidebar-foreground text-sm font-medium">
                     {item.title}
                   </p>
-                  <p className="text-sm text-sidebar-foreground/60">
-                    {item.description}
-                  </p>
+                  <p className="text-sidebar-foreground/60 text-sm">{item.description}</p>
                 </div>
               </motion.div>
             ))}

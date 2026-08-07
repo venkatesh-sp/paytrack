@@ -63,11 +63,11 @@ export default function RegisterPage() {
         title="Check your inbox"
         description="We've sent a verification link to your email."
       >
-        <div className="flex flex-col items-center gap-4 rounded-xl border bg-card p-8 text-center">
-          <span className="flex size-12 items-center justify-center rounded-full bg-primary/10 text-primary">
+        <div className="bg-card flex flex-col items-center gap-4 rounded-xl border p-8 text-center">
+          <span className="bg-primary/10 text-primary flex size-12 items-center justify-center rounded-full">
             <MailCheck className="size-6" />
           </span>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-muted-foreground text-sm">
             Click the link in the email to verify your account, then sign in.
           </p>
           <Button variant="outline" className="mt-2 w-full" asChild>
@@ -85,7 +85,10 @@ export default function RegisterPage() {
       footer={
         <p>
           Already have an account?{" "}
-          <Link href="/login" className="font-medium text-foreground underline underline-offset-4">
+          <Link
+            href="/login"
+            className="text-foreground font-medium underline underline-offset-4"
+          >
             Sign in
           </Link>
         </p>

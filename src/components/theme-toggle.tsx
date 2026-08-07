@@ -2,11 +2,7 @@ import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
 import { Moon, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 
 export function ThemeToggle() {
   const { resolvedTheme, setTheme } = useTheme();
@@ -26,7 +22,11 @@ export function ThemeToggle() {
           onClick={() => setTheme(isDark ? "light" : "dark")}
         >
           {mounted ? (
-            isDark ? <Sun className="size-4" /> : <Moon className="size-4" />
+            isDark ? (
+              <Sun className="size-4" />
+            ) : (
+              <Moon className="size-4" />
+            )
           ) : (
             <Sun className="size-4 opacity-0" />
           )}

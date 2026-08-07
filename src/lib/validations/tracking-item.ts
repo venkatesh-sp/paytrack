@@ -53,11 +53,9 @@ export const createTrackingItemSchema = z.object({
 
 export type CreateTrackingItemInput = z.infer<typeof createTrackingItemSchema>;
 
-export const updateTrackingItemSchema = createTrackingItemSchema
-  .partial()
-  .extend({
-    status: z.enum(trackingItemStatusValues).optional(),
-    outstandingAmount: moneyString.optional(),
-  });
+export const updateTrackingItemSchema = createTrackingItemSchema.partial().extend({
+  status: z.enum(trackingItemStatusValues).optional(),
+  outstandingAmount: moneyString.optional(),
+});
 
 export type UpdateTrackingItemInput = z.infer<typeof updateTrackingItemSchema>;

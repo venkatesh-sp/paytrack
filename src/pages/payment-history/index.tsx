@@ -30,7 +30,7 @@ export default function PaymentHistoryPage() {
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-semibold tracking-tight">Payment History</h1>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-muted-foreground text-sm">
             A permanent, auditable record of every payment you&apos;ve made.
           </p>
         </div>
@@ -84,7 +84,9 @@ export default function PaymentHistoryPage() {
                   <TableCell className="text-muted-foreground">
                     {formatDate(entry.paymentDate)}
                   </TableCell>
-                  <TableCell className="text-right">{formatCurrency(entry.amount)}</TableCell>
+                  <TableCell className="text-right">
+                    {formatCurrency(entry.amount)}
+                  </TableCell>
                   <TableCell>
                     {entry.paymentMethod ? (
                       <Badge variant="outline">{entry.paymentMethod}</Badge>
@@ -92,8 +94,10 @@ export default function PaymentHistoryPage() {
                       <span className="text-muted-foreground">—</span>
                     )}
                   </TableCell>
-                  <TableCell className="text-right text-muted-foreground">
-                    {entry.outstandingAfter ? formatCurrency(entry.outstandingAfter) : "—"}
+                  <TableCell className="text-muted-foreground text-right">
+                    {entry.outstandingAfter
+                      ? formatCurrency(entry.outstandingAfter)
+                      : "—"}
                   </TableCell>
                 </TableRow>
               ))}

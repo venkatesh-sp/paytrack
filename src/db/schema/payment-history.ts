@@ -19,7 +19,9 @@ import { trackingItem } from "./tracking-items";
 export const paymentHistory = pgTable(
   "payment_history",
   {
-    id: uuid("id").primaryKey().default(sql`gen_random_uuid()`),
+    id: uuid("id")
+      .primaryKey()
+      .default(sql`gen_random_uuid()`),
     userId: text("user_id")
       .notNull()
       .references(() => user.id, { onDelete: "cascade" }),

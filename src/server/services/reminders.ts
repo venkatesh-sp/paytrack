@@ -4,7 +4,10 @@ import { monthlyPayable, reminderLog, type ReminderLog } from "@/db/schema";
 
 export type ReminderLogEntry = ReminderLog & { payableTitle: string };
 
-export async function listReminderLog(userId: string, limit = 50): Promise<ReminderLogEntry[]> {
+export async function listReminderLog(
+  userId: string,
+  limit = 50,
+): Promise<ReminderLogEntry[]> {
   const rows = await db
     .select({
       reminder: reminderLog,

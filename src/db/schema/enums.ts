@@ -14,10 +14,7 @@ export const trackingItemStatusEnum = pgEnum("tracking_item_status", [
   "closed",
 ]);
 
-export const payableSourceEnum = pgEnum("payable_source", [
-  "tracking_item",
-  "manual",
-]);
+export const payableSourceEnum = pgEnum("payable_source", ["tracking_item", "manual"]);
 
 export const payableCategoryEnum = pgEnum("payable_category", [
   "emi",
@@ -32,11 +29,7 @@ export const payableCategoryEnum = pgEnum("payable_category", [
   "miscellaneous",
 ]);
 
-export const payableStatusEnum = pgEnum("payable_status", [
-  "pending",
-  "paid",
-  "overdue",
-]);
+export const payableStatusEnum = pgEnum("payable_status", ["pending", "paid", "overdue"]);
 
 export const reminderTypeEnum = pgEnum("reminder_type", [
   "seven_days_before",
@@ -53,7 +46,9 @@ export const notificationChannelEnum = pgEnum("notification_channel", [
   "sms",
 ]);
 
-export const reminderStatusEnum = pgEnum("reminder_status", [
-  "sent",
-  "failed",
+export const reminderStatusEnum = pgEnum("reminder_status", ["sent", "failed"]);
+
+export const lendingTransactionTypeEnum = pgEnum("lending_transaction_type", [
+  "you_gave",
+  "you_got",
 ]);

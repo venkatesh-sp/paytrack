@@ -1,4 +1,12 @@
-import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import {
+  CartesianGrid,
+  Line,
+  LineChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
 import { formatCurrency, formatPeriodLabel } from "@/lib/format";
 
 function CustomTooltip({
@@ -12,8 +20,8 @@ function CustomTooltip({
 }) {
   if (!active || !payload?.length || !label) return null;
   return (
-    <div className="rounded-lg border bg-popover px-3 py-2 text-xs shadow-md">
-      <p className="font-medium text-popover-foreground">{formatPeriodLabel(label)}</p>
+    <div className="bg-popover rounded-lg border px-3 py-2 text-xs shadow-md">
+      <p className="text-popover-foreground font-medium">{formatPeriodLabel(label)}</p>
       <p className="text-muted-foreground">{formatCurrency(payload[0].value)}</p>
     </div>
   );

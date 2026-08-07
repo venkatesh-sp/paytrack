@@ -1,5 +1,6 @@
 import { relations } from "drizzle-orm";
 import { account, session, user } from "./auth-schema";
+import { lendingContact, lendingTransaction } from "./lending";
 import { notificationPreference, reminderLog } from "./notifications";
 import { monthlyPayable } from "./payables";
 import { paymentHistory } from "./payment-history";
@@ -16,6 +17,8 @@ export const userRelations = relations(user, ({ many, one }) => ({
     references: [notificationPreference.userId],
   }),
   reminderLogs: many(reminderLog),
+  lendingContacts: many(lendingContact),
+  lendingTransactions: many(lendingTransaction),
 }));
 
 export const sessionRelations = relations(session, ({ one }) => ({
@@ -32,18 +35,15 @@ export const trackingItemRelations = relations(trackingItem, ({ one, many }) => 
   paymentHistory: many(paymentHistory),
 }));
 
-export const monthlyPayableRelations = relations(
-  monthlyPayable,
-  ({ one, many }) => ({
-    user: one(user, { fields: [monthlyPayable.userId], references: [user.id] }),
-    trackingItem: one(trackingItem, {
-      fields: [monthlyPayable.trackingItemId],
-      references: [trackingItem.id],
-    }),
-    payments: many(paymentHistory),
-    reminderLogs: many(reminderLog),
+export const monthlyPayableRelations = relations(monthlyPayable, ({ one, many }) => ({
+  user: one(user, { fields: [monthlyPayable.userId], references: [user.id] }),
+  trackingItem: one(trackingItem, {
+    fields: [monthlyPayable.trackingItemId],
+    references: [trackingItem.id],
   }),
-);
+  payments: many(paymentHistory),
+  reminderLogs: many(reminderLog),
+}));
 
 export const paymentHistoryRelations = relations(paymentHistory, ({ one }) => ({
   user: one(user, { fields: [paymentHistory.userId], references: [user.id] }),
@@ -72,5 +72,18 @@ export const reminderLogRelations = relations(reminderLog, ({ one }) => ({
   monthlyPayable: one(monthlyPayable, {
     fields: [reminderLog.monthlyPayableId],
     references: [monthlyPayable.id],
+  }),
+}));
+
+export const lendingContactRelations = relations(lendingContact, ({ one, many }) => ({
+  user: one(user, { fields: [lendingContact.userId], references: [user.id] }),
+  transactions: many(lendingTransaction),
+}));
+
+export const lendingTransactionRelations = relations(lendingTransaction, ({ one }) => ({
+  user: one(user, { fields: [lendingTransaction.userId], references: [user.id] }),
+  contact: one(lendingContact, {
+    fields: [lendingTransaction.contactId],
+    references: [lendingContact.id],
   }),
 }));

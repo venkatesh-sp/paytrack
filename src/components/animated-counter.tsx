@@ -1,5 +1,10 @@
 import { useEffect, useRef } from "react";
-import { animate, useMotionValue, useMotionValueEvent, useReducedMotion } from "framer-motion";
+import {
+  animate,
+  useMotionValue,
+  useMotionValueEvent,
+  useReducedMotion,
+} from "framer-motion";
 
 export function AnimatedCounter({
   value,

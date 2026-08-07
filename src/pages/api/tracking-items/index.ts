@@ -1,10 +1,7 @@
 import { withApiAuth } from "@/lib/with-api-auth";
 import { respondWithError } from "@/server/api-error";
 import { createTrackingItemSchema } from "@/lib/validations/tracking-item";
-import {
-  createTrackingItem,
-  listTrackingItems,
-} from "@/server/services/tracking-items";
+import { createTrackingItem, listTrackingItems } from "@/server/services/tracking-items";
 
 export default withApiAuth(async (req, res, session) => {
   const userId = session.user.id;

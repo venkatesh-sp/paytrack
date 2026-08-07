@@ -36,8 +36,8 @@ function CustomTooltip({
   if (!active || !payload?.length) return null;
   const item = payload[0].payload;
   return (
-    <div className="rounded-lg border bg-popover px-3 py-2 text-xs shadow-md">
-      <p className="font-medium text-popover-foreground">
+    <div className="bg-popover rounded-lg border px-3 py-2 text-xs shadow-md">
+      <p className="text-popover-foreground font-medium">
         {trackingItemTypeLabels[item.type]}
       </p>
       <p className="text-muted-foreground">{formatCurrency(item.outstanding)}</p>

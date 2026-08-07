@@ -32,7 +32,7 @@ function Row({
           <Label className="text-sm font-medium">{label}</Label>
           {comingSoon && <Badge variant="outline">Coming soon</Badge>}
         </div>
-        <p className="text-sm text-muted-foreground">{description}</p>
+        <p className="text-muted-foreground text-sm">{description}</p>
       </div>
       <Switch checked={checked} onCheckedChange={onCheckedChange} disabled={disabled} />
     </div>

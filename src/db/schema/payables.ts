@@ -16,7 +16,9 @@ import { trackingItem } from "./tracking-items";
 export const monthlyPayable = pgTable(
   "monthly_payable",
   {
-    id: uuid("id").primaryKey().default(sql`gen_random_uuid()`),
+    id: uuid("id")
+      .primaryKey()
+      .default(sql`gen_random_uuid()`),
     userId: text("user_id")
       .notNull()
       .references(() => user.id, { onDelete: "cascade" }),

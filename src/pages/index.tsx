@@ -124,7 +124,7 @@ const jsonLd = {
 
 export default function LandingPage() {
   return (
-    <div className="relative min-h-svh overflow-hidden bg-background">
+    <div className="bg-background relative min-h-svh overflow-hidden">
       <Head>
         <title>{SITE_TITLE}</title>
         <meta name="description" content={SITE_DESCRIPTION} />
@@ -156,7 +156,7 @@ export default function LandingPage() {
 
       <header className="mx-auto flex max-w-6xl items-center justify-between px-6 py-6">
         <div className="flex items-center gap-2 font-semibold">
-          <span className="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+          <span className="bg-primary text-primary-foreground flex size-8 items-center justify-center rounded-lg">
             <Wallet className="size-4" />
           </span>
           PayTrack
@@ -182,18 +182,18 @@ export default function LandingPage() {
             transition={{ duration: 0.4, ease: "easeOut" }}
             className="text-center lg:text-left"
           >
-            <div className="mx-auto mb-5 flex w-fit items-center gap-1.5 rounded-full border bg-card px-3 py-1 text-xs font-medium text-muted-foreground lg:mx-0">
-              <Sparkles className="size-3.5 text-primary" />
+            <div className="bg-card text-muted-foreground mx-auto mb-5 flex w-fit items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-medium lg:mx-0">
+              <Sparkles className="text-primary size-3.5" />
               Free, private, and 100% manual — no bank connections, ever
             </div>
             <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">
               Every payment, on time.
-              <span className="block text-primary">Every time.</span>
+              <span className="text-primary block">Every time.</span>
             </h1>
-            <p className="mx-auto mt-5 max-w-lg text-lg text-muted-foreground lg:mx-0">
-              PayTrack keeps your EMIs, loans, credit card bills, and recurring
-              payments organized — with reminders, analytics, and a full payment
-              history you can trust.
+            <p className="text-muted-foreground mx-auto mt-5 max-w-lg text-lg lg:mx-0">
+              PayTrack keeps your EMIs, loans, credit card bills, and recurring payments
+              organized — with reminders, analytics, and a full payment history you can
+              trust.
             </p>
             <div className="mt-8 flex items-center justify-center gap-3 lg:justify-start">
               <Button size="lg" asChild>
@@ -222,15 +222,13 @@ export default function LandingPage() {
             >
               <Card className="h-full">
                 <CardHeader>
-                  <span className="mb-2 flex size-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                  <span className="bg-primary/10 text-primary mb-2 flex size-10 items-center justify-center rounded-xl">
                     <feature.icon className="size-5" />
                   </span>
                   <CardTitle className="text-base">{feature.title}</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-sm text-muted-foreground">
-                    {feature.description}
-                  </p>
+                  <p className="text-muted-foreground text-sm">{feature.description}</p>
                 </CardContent>
               </Card>
             </motion.div>
@@ -240,7 +238,7 @@ export default function LandingPage() {
         <section className="pb-24">
           <div className="mx-auto max-w-2xl text-center">
             <h2 className="text-3xl font-semibold tracking-tight">How it works</h2>
-            <p className="mt-3 text-muted-foreground">
+            <p className="text-muted-foreground mt-3">
               No setup, no linking accounts — just you and your payments.
             </p>
           </div>
@@ -254,12 +252,12 @@ export default function LandingPage() {
                 transition={{ duration: 0.35, delay: i * 0.08 }}
                 className="relative text-center"
               >
-                <div className="mx-auto mb-4 flex size-12 items-center justify-center rounded-2xl bg-primary text-primary-foreground">
+                <div className="bg-primary text-primary-foreground mx-auto mb-4 flex size-12 items-center justify-center rounded-2xl">
                   <step.icon className="size-5" />
                 </div>
-                <p className="text-xs font-semibold text-primary">STEP {i + 1}</p>
+                <p className="text-primary text-xs font-semibold">STEP {i + 1}</p>
                 <h3 className="mt-1 text-base font-medium">{step.title}</h3>
-                <p className="mt-2 text-sm text-muted-foreground">{step.description}</p>
+                <p className="text-muted-foreground mt-2 text-sm">{step.description}</p>
               </motion.div>
             ))}
           </div>
@@ -270,21 +268,21 @@ export default function LandingPage() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-40px" }}
           transition={{ duration: 0.35 }}
-          className="mb-24 overflow-hidden rounded-3xl border bg-card"
+          className="bg-card mb-24 overflow-hidden rounded-3xl border"
         >
           <div className="grid grid-cols-1 items-center gap-8 p-8 sm:p-12 lg:grid-cols-2">
             <div>
-              <span className="flex size-11 items-center justify-center rounded-xl bg-primary/10 text-primary">
+              <span className="bg-primary/10 text-primary flex size-11 items-center justify-center rounded-xl">
                 <Lock className="size-5" />
               </span>
               <h2 className="mt-4 text-2xl font-semibold tracking-tight">
                 Built to be offline by design
               </h2>
-              <p className="mt-3 text-muted-foreground">
-                PayTrack never asks for your bank login, card number, or any
-                payment credential — because it never needs one. It&apos;s a
-                self-tracking ledger: you type in what you owe, and you tell
-                it when you&apos;ve paid. That&apos;s the whole model.
+              <p className="text-muted-foreground mt-3">
+                PayTrack never asks for your bank login, card number, or any payment
+                credential — because it never needs one. It&apos;s a self-tracking ledger:
+                you type in what you owe, and you tell it when you&apos;ve paid.
+                That&apos;s the whole model.
               </p>
             </div>
             <ul className="space-y-3">
@@ -295,7 +293,7 @@ export default function LandingPage() {
                 "Your data powers your dashboard, nothing else",
               ].map((item) => (
                 <li key={item} className="flex items-start gap-3 text-sm">
-                  <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-primary" />
+                  <CheckCircle2 className="text-primary mt-0.5 size-4 shrink-0" />
                   <span>{item}</span>
                 </li>
               ))}
@@ -330,7 +328,7 @@ export default function LandingPage() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-40px" }}
           transition={{ duration: 0.35 }}
-          className="relative mb-24 overflow-hidden rounded-3xl bg-primary px-8 py-16 text-center text-primary-foreground sm:px-12"
+          className="bg-primary text-primary-foreground relative mb-24 overflow-hidden rounded-3xl px-8 py-16 text-center sm:px-12"
         >
           <div
             aria-hidden
@@ -339,7 +337,8 @@ export default function LandingPage() {
               backgroundImage:
                 "linear-gradient(to right, white 1px, transparent 1px), linear-gradient(to bottom, white 1px, transparent 1px)",
               backgroundSize: "40px 40px",
-              maskImage: "radial-gradient(ellipse 60% 100% at 50% 50%, black, transparent)",
+              maskImage:
+                "radial-gradient(ellipse 60% 100% at 50% 50%, black, transparent)",
               WebkitMaskImage:
                 "radial-gradient(ellipse 60% 100% at 50% 50%, black, transparent)",
             }}
@@ -352,9 +351,9 @@ export default function LandingPage() {
             <h2 className="text-3xl font-semibold tracking-tight">
               Start tracking in the next minute
             </h2>
-            <p className="mx-auto mt-3 max-w-md text-primary-foreground/80">
-              No bank connections, no card details, no waiting. Just add your
-              first loan or bill and see your dashboard come to life.
+            <p className="text-primary-foreground/80 mx-auto mt-3 max-w-md">
+              No bank connections, no card details, no waiting. Just add your first loan
+              or bill and see your dashboard come to life.
             </p>
             <Button size="lg" variant="secondary" className="mt-8" asChild>
               <Link href="/register">
@@ -366,7 +365,7 @@ export default function LandingPage() {
         </motion.section>
       </main>
 
-      <footer className="border-t py-8 text-center text-sm text-muted-foreground">
+      <footer className="text-muted-foreground border-t py-8 text-center text-sm">
         &copy; {new Date().getFullYear()} PayTrack. All rights reserved.
       </footer>
     </div>

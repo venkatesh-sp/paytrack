@@ -31,7 +31,9 @@ export default function EditTrackingItemPage() {
   return (
     <DashboardShell>
       <Head>
-        <title>{item ? `Edit ${item.name} · PayTrack` : "Edit tracking item · PayTrack"}</title>
+        <title>
+          {item ? `Edit ${item.name} · PayTrack` : "Edit tracking item · PayTrack"}
+        </title>
       </Head>
 
       <div>

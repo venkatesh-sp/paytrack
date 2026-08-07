@@ -19,7 +19,10 @@ function lastNPeriods(n: number): string[] {
   return periods;
 }
 
-async function trackingItemIdsForType(userId: string, type?: string): Promise<string[] | null> {
+async function trackingItemIdsForType(
+  userId: string,
+  type?: string,
+): Promise<string[] | null> {
   if (!type) return null;
   const items = await db
     .select({ id: trackingItem.id })
@@ -39,9 +42,7 @@ export async function getMonthlyEmiTrend(userId: string, filters: AnalyticsFilte
   ];
   if (itemIds !== null) {
     conditions.push(
-      itemIds.length > 0
-        ? inArray(monthlyPayable.trackingItemId, itemIds)
-        : sql`false`,
+      itemIds.length > 0 ? inArray(monthlyPayable.trackingItemId, itemIds) : sql`false`,
     );
   }
 
@@ -74,7 +75,10 @@ export async function getOutstandingTrend(userId: string, filters: AnalyticsFilt
     .from(trackingItem)
     .where(and(...itemConditions));
 
-  const paymentConditions = [eq(paymentHistory.userId, userId), sql`${paymentHistory.trackingItemId} is not null`];
+  const paymentConditions = [
+    eq(paymentHistory.userId, userId),
+    sql`${paymentHistory.trackingItemId} is not null`,
+  ];
   if (itemIds !== null) {
     paymentConditions.push(
       itemIds.length > 0 ? inArray(paymentHistory.trackingItemId, itemIds) : sql`false`,
@@ -90,11 +94,7 @@ export async function getOutstandingTrend(userId: string, filters: AnalyticsFilt
   // payment made after month M (those payments hadn't happened yet then).
   const current = toNumber(currentTotal?.total);
   return periods.map((period) => {
-    const monthEnd = new Date(
-      Number(period.slice(0, 4)),
-      Number(period.slice(5, 7)),
-      0,
-    )
+    const monthEnd = new Date(Number(period.slice(0, 4)), Number(period.slice(5, 7)), 0)
       .toISOString()
       .slice(0, 10);
     const paidAfter = payments
@@ -117,9 +117,7 @@ export async function getCategoryDistribution(userId: string, filters: Analytics
   }
   if (itemIds !== null) {
     conditions.push(
-      itemIds.length > 0
-        ? inArray(monthlyPayable.trackingItemId, itemIds)
-        : sql`false`,
+      itemIds.length > 0 ? inArray(monthlyPayable.trackingItemId, itemIds) : sql`false`,
     );
   }
 
@@ -148,9 +146,7 @@ export async function getPaidVsPending(userId: string, filters: AnalyticsFilters
   }
   if (itemIds !== null) {
     conditions.push(
-      itemIds.length > 0
-        ? inArray(monthlyPayable.trackingItemId, itemIds)
-        : sql`false`,
+      itemIds.length > 0 ? inArray(monthlyPayable.trackingItemId, itemIds) : sql`false`,
     );
   }
 
@@ -177,9 +173,7 @@ export async function getYearlySummary(userId: string, filters: AnalyticsFilters
   ];
   if (itemIds !== null) {
     conditions.push(
-      itemIds.length > 0
-        ? inArray(monthlyPayable.trackingItemId, itemIds)
-        : sql`false`,
+      itemIds.length > 0 ? inArray(monthlyPayable.trackingItemId, itemIds) : sql`false`,
     );
   }
 
@@ -215,5 +209,11 @@ export async function getAnalytics(userId: string, filters: AnalyticsFilters) {
       getYearlySummary(userId, filters),
     ]);
 
-  return { emiTrend, outstandingTrend, categoryDistribution, paidVsPending, yearlySummary };
+  return {
+    emiTrend,
+    outstandingTrend,
+    categoryDistribution,
+    paidVsPending,
+    yearlySummary,
+  };
 }

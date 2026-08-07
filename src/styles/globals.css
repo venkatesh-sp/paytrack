@@ -123,6 +123,53 @@
   --sidebar-ring: oklch(0.556 0 0);
 }
 
+/* Color presets: same lightness/chroma formulas as the default Indigo palette above,
+   only the OKLCH hue changes, so every preset keeps the same contrast/saturation. */
+[data-color-preset="emerald"] {
+  --primary: oklch(0.51 0.22 155);
+  --accent: oklch(0.95 0.03 155);
+  --accent-foreground: oklch(0.35 0.15 155);
+  --ring: oklch(0.51 0.22 155);
+}
+.dark[data-color-preset="emerald"] {
+  --primary: oklch(0.68 0.19 155);
+  --accent: oklch(0.28 0.08 155);
+  --accent-foreground: oklch(0.9 0.05 155);
+  --ring: oklch(0.68 0.19 155);
+  --sidebar: oklch(0.16 0.01 155);
+  --sidebar-primary: oklch(0.488 0.243 155);
+}
+
+[data-color-preset="rose"] {
+  --primary: oklch(0.51 0.22 350);
+  --accent: oklch(0.95 0.03 350);
+  --accent-foreground: oklch(0.35 0.15 350);
+  --ring: oklch(0.51 0.22 350);
+}
+.dark[data-color-preset="rose"] {
+  --primary: oklch(0.68 0.19 350);
+  --accent: oklch(0.28 0.08 350);
+  --accent-foreground: oklch(0.9 0.05 350);
+  --ring: oklch(0.68 0.19 350);
+  --sidebar: oklch(0.16 0.01 350);
+  --sidebar-primary: oklch(0.488 0.243 350);
+}
+
+[data-color-preset="amber"] {
+  --primary: oklch(0.51 0.22 75);
+  --accent: oklch(0.95 0.03 75);
+  --accent-foreground: oklch(0.35 0.15 75);
+  --ring: oklch(0.51 0.22 75);
+}
+.dark[data-color-preset="amber"] {
+  --primary: oklch(0.68 0.19 75);
+  --accent: oklch(0.28 0.08 75);
+  --accent-foreground: oklch(0.9 0.05 75);
+  --ring: oklch(0.68 0.19 75);
+  --sidebar: oklch(0.16 0.01 75);
+  --sidebar-primary: oklch(0.488 0.243 75);
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

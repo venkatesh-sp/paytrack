@@ -36,7 +36,13 @@ function initials(name?: string | null) {
 export default function ProfilePage() {
   const { data, isPending } = authClient.useSession();
   const user = data?.user as
-    | { name?: string; email?: string; firstName?: string; lastName?: string; phone?: string }
+    | {
+        name?: string;
+        email?: string;
+        firstName?: string;
+        lastName?: string;
+        phone?: string;
+      }
     | undefined;
 
   const form = useForm<UpdateProfileInput>({
@@ -79,9 +85,7 @@ export default function ProfilePage() {
 
       <div>
         <h1 className="text-2xl font-semibold tracking-tight">Profile</h1>
-        <p className="text-sm text-muted-foreground">
-          Update your personal details.
-        </p>
+        <p className="text-muted-foreground text-sm">Update your personal details.</p>
       </div>
 
       <Card className="max-w-xl">
@@ -92,7 +96,7 @@ export default function ProfilePage() {
             </Avatar>
             <div>
               <CardTitle className="text-base">{user?.name ?? "—"}</CardTitle>
-              <p className="text-sm text-muted-foreground">{user?.email}</p>
+              <p className="text-muted-foreground text-sm">{user?.email}</p>
             </div>
           </div>
         </CardHeader>
@@ -105,7 +109,11 @@ export default function ProfilePage() {
             </div>
           ) : (
             <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4" noValidate>
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="space-y-4"
+                noValidate
+              >
                 <div className="grid grid-cols-2 gap-4">
                   <FormField
                     control={form.control}
@@ -138,7 +146,7 @@ export default function ProfilePage() {
                 <div>
                   <FormLabel className="mb-2 block">Email</FormLabel>
                   <Input value={user?.email ?? ""} disabled readOnly />
-                  <p className="mt-1.5 text-xs text-muted-foreground">
+                  <p className="text-muted-foreground mt-1.5 text-xs">
                     Your email can&apos;t be changed.
                   </p>
                 </div>
@@ -160,7 +168,9 @@ export default function ProfilePage() {
                 />
 
                 <Button type="submit" disabled={form.formState.isSubmitting}>
-                  {form.formState.isSubmitting && <Loader2 className="size-4 animate-spin" />}
+                  {form.formState.isSubmitting && (
+                    <Loader2 className="size-4 animate-spin" />
+                  )}
                   Save changes
                 </Button>
               </form>

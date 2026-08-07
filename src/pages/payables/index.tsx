@@ -5,8 +5,8 @@ import { toast } from "sonner";
 
 import { DashboardShell } from "@/components/layout/dashboard-shell";
 import { EmptyState } from "@/components/empty-state";
+import { StatusBadge } from "@/components/status-badge";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   Select,
@@ -31,6 +31,7 @@ import {
   formatCurrency,
   formatDate,
   payableCategoryLabels,
+  payableStatusIcons,
   payableStatusLabels,
 } from "@/lib/format";
 import { ApiError } from "@/lib/api/client";
@@ -52,7 +53,11 @@ function effectiveStatus(status: string, dueDate: string) {
 export default function PayablesPage() {
   const [month, setMonth] = useState(currentBillingPeriod());
   const [status, setStatus] = useState<string>("all");
-  const { data: payables, isLoading, isError } = usePayables({
+  const {
+    data: payables,
+    isLoading,
+    isError,
+  } = usePayables({
     month,
     status: status === "all" ? undefined : status,
   });
@@ -61,7 +66,9 @@ export default function PayablesPage() {
   async function handleGenerate() {
     try {
       const result = await generateMutation.mutateAsync(month);
-      toast.success(`Generated ${result.created} payable${result.created === 1 ? "" : "s"}`);
+      toast.success(
+        `Generated ${result.created} payable${result.created === 1 ? "" : "s"}`,
+      );
     } catch (error) {
       toast.error(error instanceof ApiError ? error.message : "Something went wrong");
     }
@@ -76,13 +83,19 @@ export default function PayablesPage() {
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-semibold tracking-tight">Monthly Payables</h1>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-muted-foreground text-sm">
             EMIs generated from tracking items, plus manual bills.
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-2">
-          <Button variant="outline" onClick={handleGenerate} disabled={generateMutation.isPending}>
-            <RefreshCw className={generateMutation.isPending ? "size-4 animate-spin" : "size-4"} />
+          <Button
+            variant="outline"
+            onClick={handleGenerate}
+            disabled={generateMutation.isPending}
+          >
+            <RefreshCw
+              className={generateMutation.isPending ? "size-4 animate-spin" : "size-4"}
+            />
             Generate this month
           </Button>
           <AddPayableDialog />
@@ -163,11 +176,19 @@ export default function PayablesPage() {
                     <TableCell className="text-muted-foreground">
                       {formatDate(payable.dueDate)}
                     </TableCell>
-                    <TableCell className="text-right">{formatCurrency(payable.amount)}</TableCell>
+                    <TableCell className="text-right">
+                      {formatCurrency(payable.amount)}
+                    </TableCell>
                     <TableCell>
-                      <Badge variant={statusVariant[status] ?? "secondary"}>
-                        {status === "overdue" ? "Overdue" : payableStatusLabels[payable.status]}
-                      </Badge>
+                      <StatusBadge
+                        variant={statusVariant[status] ?? "secondary"}
+                        icon={payableStatusIcons[status] ?? payableStatusIcons.pending}
+                        label={
+                          status === "overdue"
+                            ? "Overdue"
+                            : payableStatusLabels[payable.status]
+                        }
+                      />
                     </TableCell>
                     <TableCell className="text-right">
                       {payable.status !== "paid" && (

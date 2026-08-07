@@ -1,11 +1,7 @@
 import { withApiAuth } from "@/lib/with-api-auth";
 import { respondWithError } from "@/server/api-error";
 import { updatePayableSchema } from "@/lib/validations/payable";
-import {
-  deletePayable,
-  getPayableById,
-  updatePayable,
-} from "@/server/services/payables";
+import { deletePayable, getPayableById, updatePayable } from "@/server/services/payables";
 
 export default withApiAuth(async (req, res, session) => {
   const userId = session.user.id;

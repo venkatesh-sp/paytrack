@@ -1,11 +1,7 @@
 import { and, desc, eq, isNotNull } from "drizzle-orm";
 import { db } from "@/db";
 import { monthlyPayable, trackingItem, type MonthlyPayable } from "@/db/schema";
-import {
-  currentBillingPeriod,
-  dueDateFor,
-  parseBillingPeriod,
-} from "@/lib/dates";
+import { currentBillingPeriod, dueDateFor, parseBillingPeriod } from "@/lib/dates";
 import { NotFoundError, ValidationError } from "@/server/errors";
 import type {
   CreateManualPayableInput,
@@ -94,13 +90,17 @@ export async function listPayables(
 ): Promise<MonthlyPayable[]> {
   const conditions = [eq(monthlyPayable.userId, userId)];
   if (filters.status) {
-    conditions.push(eq(monthlyPayable.status, filters.status as MonthlyPayable["status"]));
+    conditions.push(
+      eq(monthlyPayable.status, filters.status as MonthlyPayable["status"]),
+    );
   }
   if (filters.billingPeriod) {
     conditions.push(eq(monthlyPayable.billingPeriod, filters.billingPeriod));
   }
   if (filters.category) {
-    conditions.push(eq(monthlyPayable.category, filters.category as MonthlyPayable["category"]));
+    conditions.push(
+      eq(monthlyPayable.category, filters.category as MonthlyPayable["category"]),
+    );
   }
 
   return db
@@ -110,7 +110,10 @@ export async function listPayables(
     .orderBy(desc(monthlyPayable.dueDate));
 }
 
-export async function getPayableById(userId: string, id: string): Promise<MonthlyPayable> {
+export async function getPayableById(
+  userId: string,
+  id: string,
+): Promise<MonthlyPayable> {
   const [payable] = await db
     .select()
     .from(monthlyPayable)
@@ -127,7 +130,10 @@ export async function updatePayable(
 ): Promise<MonthlyPayable> {
   const current = await getPayableById(userId, id);
 
-  if (current.source === "tracking_item" && (input.amount || input.category || input.title)) {
+  if (
+    current.source === "tracking_item" &&
+    (input.amount || input.category || input.title)
+  ) {
     throw new ValidationError(
       "Amount, title, and category are derived from the tracking item and can't be edited directly",
     );
@@ -157,7 +163,9 @@ export async function deletePayable(userId: string, id: string): Promise<void> {
   const current = await getPayableById(userId, id);
 
   if (Number(current.paidAmount) > 0) {
-    throw new ValidationError("Can't delete a payable that already has payments recorded");
+    throw new ValidationError(
+      "Can't delete a payable that already has payments recorded",
+    );
   }
 
   await db

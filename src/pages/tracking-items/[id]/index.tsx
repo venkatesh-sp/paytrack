@@ -2,12 +2,12 @@ import { useState } from "react";
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { Pencil, Trash2 } from "lucide-react";
+import { CircleDot, Pencil, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { DashboardShell } from "@/components/layout/dashboard-shell";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import { StatusBadge } from "@/components/status-badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
@@ -25,6 +25,7 @@ import { useDeleteTrackingItem, useTrackingItem } from "@/hooks/use-tracking-ite
 import {
   formatCurrency,
   formatDate,
+  trackingItemStatusIcons,
   trackingItemStatusLabels,
   trackingItemTypeLabels,
 } from "@/lib/format";
@@ -40,7 +41,7 @@ const statusVariant: Record<string, "default" | "secondary" | "outline"> = {
 function Field({ label, value }: { label: string; value: string }) {
   return (
     <div>
-      <p className="text-xs text-muted-foreground">{label}</p>
+      <p className="text-muted-foreground text-xs">{label}</p>
       <p className="text-sm font-medium">{value}</p>
     </div>
   );
@@ -77,7 +78,9 @@ export default function TrackingItemDetailPage() {
         </div>
       )}
 
-      {isError && <p className="text-sm text-muted-foreground">Tracking item not found.</p>}
+      {isError && (
+        <p className="text-muted-foreground text-sm">Tracking item not found.</p>
+      )}
 
       {item && (
         <>
@@ -85,11 +88,13 @@ export default function TrackingItemDetailPage() {
             <div>
               <div className="flex items-center gap-3">
                 <h1 className="text-2xl font-semibold tracking-tight">{item.name}</h1>
-                <Badge variant={statusVariant[item.status] ?? "default"}>
-                  {trackingItemStatusLabels[item.status]}
-                </Badge>
+                <StatusBadge
+                  variant={statusVariant[item.status] ?? "default"}
+                  icon={trackingItemStatusIcons[item.status] ?? CircleDot}
+                  label={trackingItemStatusLabels[item.status]}
+                />
               </div>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-muted-foreground text-sm">
                 {trackingItemTypeLabels[item.type]}
                 {item.lenderName ? ` · ${item.lenderName}` : ""}
               </p>
@@ -103,7 +108,10 @@ export default function TrackingItemDetailPage() {
               </Button>
               <AlertDialog open={deleteOpen} onOpenChange={setDeleteOpen}>
                 <AlertDialogTrigger asChild>
-                  <Button variant="outline" className="text-destructive hover:text-destructive">
+                  <Button
+                    variant="outline"
+                    className="text-destructive hover:text-destructive"
+                  >
                     <Trash2 className="size-4" />
                     Delete
                   </Button>
@@ -113,15 +121,15 @@ export default function TrackingItemDetailPage() {
                     <AlertDialogTitle>Delete this tracking item?</AlertDialogTitle>
                     <AlertDialogDescription>
                       This removes &quot;{item.name}&quot; from your tracking items.
-                      Existing payables and payment history stay intact for your
-                      records, but will no longer be linked to this item.
+                      Existing payables and payment history stay intact for your records,
+                      but will no longer be linked to this item.
                     </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>
                     <AlertDialogCancel>Cancel</AlertDialogCancel>
                     <AlertDialogAction
                       onClick={handleDelete}
-                      className="bg-destructive text-white hover:bg-destructive/90"
+                      className="bg-destructive hover:bg-destructive/90 text-white"
                     >
                       Delete
                     </AlertDialogAction>
@@ -134,7 +142,7 @@ export default function TrackingItemDetailPage() {
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
             <Card>
               <CardHeader className="pb-2">
-                <CardTitle className="text-xs font-medium text-muted-foreground">
+                <CardTitle className="text-muted-foreground text-xs font-medium">
                   Outstanding
                 </CardTitle>
               </CardHeader>
@@ -146,7 +154,7 @@ export default function TrackingItemDetailPage() {
             </Card>
             <Card>
               <CardHeader className="pb-2">
-                <CardTitle className="text-xs font-medium text-muted-foreground">
+                <CardTitle className="text-muted-foreground text-xs font-medium">
                   Monthly EMI
                 </CardTitle>
               </CardHeader>
@@ -158,7 +166,7 @@ export default function TrackingItemDetailPage() {
             </Card>
             <Card>
               <CardHeader className="pb-2">
-                <CardTitle className="text-xs font-medium text-muted-foreground">
+                <CardTitle className="text-muted-foreground text-xs font-medium">
                   Principal
                 </CardTitle>
               </CardHeader>
@@ -170,7 +178,7 @@ export default function TrackingItemDetailPage() {
             </Card>
             <Card>
               <CardHeader className="pb-2">
-                <CardTitle className="text-xs font-medium text-muted-foreground">
+                <CardTitle className="text-muted-foreground text-xs font-medium">
                   Interest rate
                 </CardTitle>
               </CardHeader>
@@ -198,7 +206,7 @@ export default function TrackingItemDetailPage() {
               <Field label="Created" value={formatDate(item.createdAt)} />
               {item.notes && (
                 <div className="col-span-full">
-                  <p className="text-xs text-muted-foreground">Notes</p>
+                  <p className="text-muted-foreground text-xs">Notes</p>
                   <p className="text-sm">{item.notes}</p>
                 </div>
               )}

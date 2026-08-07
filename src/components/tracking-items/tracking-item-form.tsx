@@ -148,7 +148,8 @@ export function TrackingItemForm({
             render={({ field }) => (
               <FormItem>
                 <FormLabel>
-                  Interest rate % <span className="text-muted-foreground">(optional)</span>
+                  Interest rate %{" "}
+                  <span className="text-muted-foreground">(optional)</span>
                 </FormLabel>
                 <FormControl>
                   <Input inputMode="decimal" placeholder="8.5" {...field} />
@@ -206,7 +207,8 @@ export function TrackingItemForm({
             render={({ field }) => (
               <FormItem>
                 <FormLabel>
-                  Account last 4 digits <span className="text-muted-foreground">(optional)</span>
+                  Account last 4 digits{" "}
+                  <span className="text-muted-foreground">(optional)</span>
                 </FormLabel>
                 <FormControl>
                   <Input placeholder="1234" maxLength={4} {...field} />

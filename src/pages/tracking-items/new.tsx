@@ -32,7 +32,7 @@ export default function NewTrackingItemPage() {
 
       <div>
         <h1 className="text-2xl font-semibold tracking-tight">Add tracking item</h1>
-        <p className="text-sm text-muted-foreground">
+        <p className="text-muted-foreground text-sm">
           Add a loan, EMI, or credit card to start tracking payments.
         </p>
       </div>

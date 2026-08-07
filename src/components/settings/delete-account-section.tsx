@@ -46,9 +46,9 @@ export function DeleteAccountSection() {
     <div className="flex items-center justify-between gap-4">
       <div>
         <p className="text-sm font-medium">Delete account</p>
-        <p className="text-sm text-muted-foreground">
-          Permanently deletes your account and all tracking items, payables,
-          and payment history. This can&apos;t be undone.
+        <p className="text-muted-foreground text-sm">
+          Permanently deletes your account and all tracking items, payables, and payment
+          history. This can&apos;t be undone.
         </p>
       </div>
       <Dialog open={open} onOpenChange={setOpen}>
@@ -62,9 +62,8 @@ export function DeleteAccountSection() {
           <DialogHeader>
             <DialogTitle>Delete your account?</DialogTitle>
             <DialogDescription>
-              This permanently deletes your account and every tracking item,
-              payable, and payment record associated with it. Enter your
-              password to confirm.
+              This permanently deletes your account and every tracking item, payable, and
+              payment record associated with it. Enter your password to confirm.
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-2">
@@ -79,7 +78,7 @@ export function DeleteAccountSection() {
           <DialogFooter>
             <Button
               variant="outline"
-              className="bg-destructive text-white hover:bg-destructive/90"
+              className="bg-destructive hover:bg-destructive/90 text-white"
               onClick={handleDelete}
               disabled={submitting}
             >

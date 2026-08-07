@@ -18,7 +18,10 @@ export function HeroBackground() {
         };
 
   return (
-    <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+    <div
+      aria-hidden
+      className="pointer-events-none absolute inset-0 -z-10 overflow-hidden"
+    >
       {/* Grid pattern, faded toward the edges */}
       <div
         className="absolute inset-0 opacity-[0.35] dark:opacity-[0.25]"
@@ -26,7 +29,8 @@ export function HeroBackground() {
           backgroundImage:
             "linear-gradient(to right, var(--border) 1px, transparent 1px), linear-gradient(to bottom, var(--border) 1px, transparent 1px)",
           backgroundSize: "56px 56px",
-          maskImage: "radial-gradient(ellipse 70% 55% at 50% 0%, black 40%, transparent 90%)",
+          maskImage:
+            "radial-gradient(ellipse 70% 55% at 50% 0%, black 40%, transparent 90%)",
           WebkitMaskImage:
             "radial-gradient(ellipse 70% 55% at 50% 0%, black 40%, transparent 90%)",
         }}

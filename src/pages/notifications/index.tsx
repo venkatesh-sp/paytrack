@@ -4,11 +4,11 @@ import { Bell, Mail, Settings as SettingsIcon } from "lucide-react";
 
 import { DashboardShell } from "@/components/layout/dashboard-shell";
 import { EmptyState } from "@/components/empty-state";
+import { StatusBadge } from "@/components/status-badge";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useReminders } from "@/hooks/use-settings";
-import { formatDate } from "@/lib/format";
+import { formatDate, reminderStatusIcons, reminderStatusLabels } from "@/lib/format";
 import { withAuth } from "@/lib/with-auth";
 
 const reminderTypeLabels: Record<string, string> = {
@@ -30,7 +30,7 @@ export default function NotificationsPage() {
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-semibold tracking-tight">Notifications</h1>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-muted-foreground text-sm">
             A history of reminders PayTrack has sent you.
           </p>
         </div>
@@ -79,22 +79,25 @@ export default function NotificationsPage() {
           {reminders.map((reminder) => (
             <div
               key={reminder.id}
-              className="flex items-center justify-between gap-4 rounded-xl border bg-card p-4"
+              className="bg-card flex items-center justify-between gap-4 rounded-xl border p-4"
             >
               <div className="flex items-center gap-3">
-                <span className="flex size-9 items-center justify-center rounded-full bg-primary/10 text-primary">
+                <span className="bg-primary/10 text-primary flex size-9 items-center justify-center rounded-full">
                   <Mail className="size-4" />
                 </span>
                 <div>
                   <p className="text-sm font-medium">{reminder.payableTitle}</p>
-                  <p className="text-xs text-muted-foreground">
-                    {reminderTypeLabels[reminder.reminderType]} · {formatDate(reminder.sentAt)}
+                  <p className="text-muted-foreground text-xs">
+                    {reminderTypeLabels[reminder.reminderType]} ·{" "}
+                    {formatDate(reminder.sentAt)}
                   </p>
                 </div>
               </div>
-              <Badge variant={reminder.status === "sent" ? "outline" : "destructive"}>
-                {reminder.status === "sent" ? "Sent" : "Failed"}
-              </Badge>
+              <StatusBadge
+                variant={reminder.status === "sent" ? "outline" : "destructive"}
+                icon={reminderStatusIcons[reminder.status] ?? reminderStatusIcons.sent}
+                label={reminderStatusLabels[reminder.status] ?? reminder.status}
+              />
             </div>
           ))}
         </div>

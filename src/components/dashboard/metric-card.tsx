@@ -19,10 +19,12 @@ export function MetricCard({
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between pb-2">
-        <CardTitle className="text-xs font-medium text-muted-foreground">{label}</CardTitle>
+        <CardTitle className="text-muted-foreground text-xs font-medium">
+          {label}
+        </CardTitle>
         <Icon
           className={cn(
-            "size-4 text-muted-foreground",
+            "text-muted-foreground size-4",
             tone === "warning" && "text-warning",
             tone === "destructive" && "text-destructive",
           )}

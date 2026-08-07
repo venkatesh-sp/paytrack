@@ -58,12 +58,16 @@ export default function AnalyticsPage() {
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-semibold tracking-tight">Analytics</h1>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-muted-foreground text-sm">
             Trends and breakdowns across your loans, EMIs, and bills.
           </p>
         </div>
         <ExportButton
-          filters={{ year: month ? undefined : year, month: month || undefined, type: type === "all" ? undefined : type }}
+          filters={{
+            year: month ? undefined : year,
+            month: month || undefined,
+            type: type === "all" ? undefined : type,
+          }}
           subtitle={`${month || `Year ${year}`}${type !== "all" ? ` · ${trackingItemTypeLabels[type]}` : ""}`}
         />
       </div>
@@ -166,7 +170,11 @@ export default function AnalyticsPage() {
                 <CardTitle className="text-base">Monthly EMI Trend</CardTitle>
               </CardHeader>
               <CardContent>
-                <TrendChart data={data.emiTrend} dataKey="amount" color="var(--chart-1)" />
+                <TrendChart
+                  data={data.emiTrend}
+                  dataKey="amount"
+                  color="var(--chart-1)"
+                />
               </CardContent>
             </Card>
 
@@ -189,7 +197,7 @@ export default function AnalyticsPage() {
               </CardHeader>
               <CardContent>
                 {data.categoryDistribution.length === 0 ? (
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-muted-foreground text-sm">
                     No payables in this period.
                   </p>
                 ) : (
@@ -203,7 +211,10 @@ export default function AnalyticsPage() {
                 <CardTitle className="text-base">Paid vs Pending</CardTitle>
               </CardHeader>
               <CardContent>
-                <PaidVsPendingBar paid={data.paidVsPending.paid} pending={data.paidVsPending.pending} />
+                <PaidVsPendingBar
+                  paid={data.paidVsPending.paid}
+                  pending={data.paidVsPending.pending}
+                />
               </CardContent>
             </Card>
           </div>

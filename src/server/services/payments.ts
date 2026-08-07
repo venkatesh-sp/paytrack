@@ -56,7 +56,10 @@ export async function recordPayment(
         .select()
         .from(trackingItem)
         .where(
-          and(eq(trackingItem.id, payable.trackingItemId), eq(trackingItem.userId, userId)),
+          and(
+            eq(trackingItem.id, payable.trackingItemId),
+            eq(trackingItem.userId, userId),
+          ),
         )
         .for("update");
 
@@ -125,7 +128,10 @@ export async function listPaymentHistory(
     const [year, month] = filters.month.split("-").map(Number);
     const start = new Date(year, month - 1, 1).toISOString().slice(0, 10);
     const end = new Date(year, month, 1).toISOString().slice(0, 10);
-    conditions.push(gte(paymentHistory.paymentDate, start), lt(paymentHistory.paymentDate, end));
+    conditions.push(
+      gte(paymentHistory.paymentDate, start),
+      lt(paymentHistory.paymentDate, end),
+    );
   } else if (filters.year) {
     conditions.push(
       gte(paymentHistory.paymentDate, `${filters.year}-01-01`),

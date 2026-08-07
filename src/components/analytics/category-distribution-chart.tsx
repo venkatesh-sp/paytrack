@@ -1,4 +1,12 @@
-import { Bar, BarChart, Cell, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import {
+  Bar,
+  BarChart,
+  Cell,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
 import { formatCurrency, payableCategoryLabels } from "@/lib/format";
 
 // Fixed hue order — never reassigned by value/rank. Categories past the 8th
@@ -34,8 +42,8 @@ function CustomTooltip({
   if (!active || !payload?.length) return null;
   const item = payload[0].payload;
   return (
-    <div className="rounded-lg border bg-popover px-3 py-2 text-xs shadow-md">
-      <p className="font-medium text-popover-foreground">{item.label}</p>
+    <div className="bg-popover rounded-lg border px-3 py-2 text-xs shadow-md">
+      <p className="text-popover-foreground font-medium">{item.label}</p>
       <p className="text-muted-foreground">{formatCurrency(item.amount)}</p>
     </div>
   );
@@ -85,7 +93,11 @@ export function CategoryDistributionChart({
           {chartData.map((entry, i) => (
             <Cell
               key={entry.key}
-              fill={entry.key === "other" ? "var(--muted-foreground)" : SERIES_COLORS[i % SERIES_COLORS.length]}
+              fill={
+                entry.key === "other"
+                  ? "var(--muted-foreground)"
+                  : SERIES_COLORS[i % SERIES_COLORS.length]
+              }
             />
           ))}
         </Bar>

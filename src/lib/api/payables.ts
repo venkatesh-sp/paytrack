@@ -1,5 +1,8 @@
 import { apiFetch } from "@/lib/api/client";
-import type { CreateManualPayableInput, UpdatePayableInput } from "@/lib/validations/payable";
+import type {
+  CreateManualPayableInput,
+  UpdatePayableInput,
+} from "@/lib/validations/payable";
 import type { RecordPaymentInput } from "@/lib/validations/payment";
 import type { MonthlyPayable, PaymentHistory, TrackingItem } from "@/db/schema";
 import type { PaymentHistoryEntry } from "@/server/services/payments";
@@ -71,5 +74,7 @@ export function fetchPaymentHistory(filters?: PaymentHistoryFilters) {
   if (filters?.month) params.set("month", filters.month);
   if (filters?.type) params.set("type", filters.type);
   const qs = params.toString();
-  return apiFetch<{ history: PaymentHistoryEntry[] }>(`/api/payment-history${qs ? `?${qs}` : ""}`);
+  return apiFetch<{ history: PaymentHistoryEntry[] }>(
+    `/api/payment-history${qs ? `?${qs}` : ""}`,
+  );
 }

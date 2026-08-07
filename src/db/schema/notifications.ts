@@ -10,16 +10,14 @@ import {
 } from "drizzle-orm/pg-core";
 import { user } from "./auth-schema";
 import { monthlyPayable } from "./payables";
-import {
-  notificationChannelEnum,
-  reminderStatusEnum,
-  reminderTypeEnum,
-} from "./enums";
+import { notificationChannelEnum, reminderStatusEnum, reminderTypeEnum } from "./enums";
 
 export const notificationPreference = pgTable(
   "notification_preference",
   {
-    id: uuid("id").primaryKey().default(sql`gen_random_uuid()`),
+    id: uuid("id")
+      .primaryKey()
+      .default(sql`gen_random_uuid()`),
     userId: text("user_id")
       .notNull()
       .references(() => user.id, { onDelete: "cascade" })
@@ -29,15 +27,9 @@ export const notificationPreference = pgTable(
     pushEnabled: boolean("push_enabled").notNull().default(false),
     whatsappEnabled: boolean("whatsapp_enabled").notNull().default(false),
     smsEnabled: boolean("sms_enabled").notNull().default(false),
-    remindSevenDaysBefore: boolean("remind_seven_days_before")
-      .notNull()
-      .default(true),
-    remindThreeDaysBefore: boolean("remind_three_days_before")
-      .notNull()
-      .default(true),
-    remindOneDayBefore: boolean("remind_one_day_before")
-      .notNull()
-      .default(true),
+    remindSevenDaysBefore: boolean("remind_seven_days_before").notNull().default(true),
+    remindThreeDaysBefore: boolean("remind_three_days_before").notNull().default(true),
+    remindOneDayBefore: boolean("remind_one_day_before").notNull().default(true),
     remindOnDueDate: boolean("remind_on_due_date").notNull().default(true),
     timezone: text("timezone").notNull().default("Asia/Kolkata"),
     createdAt: timestamp("created_at").defaultNow().notNull(),
@@ -56,7 +48,9 @@ export const notificationPreference = pgTable(
 export const reminderLog = pgTable(
   "reminder_log",
   {
-    id: uuid("id").primaryKey().default(sql`gen_random_uuid()`),
+    id: uuid("id")
+      .primaryKey()
+      .default(sql`gen_random_uuid()`),
     userId: text("user_id")
       .notNull()
       .references(() => user.id, { onDelete: "cascade" }),
