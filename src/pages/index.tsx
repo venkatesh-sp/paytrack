@@ -1,82 +1,382 @@
-import Image from "next/image";
-import { Geist, Geist_Mono } from "next/font/google";
+import Head from "next/head";
+import Link from "next/link";
+import { motion } from "framer-motion";
+import {
+  ArrowRight,
+  BellRing,
+  CheckCircle2,
+  ClipboardList,
+  Lock,
+  ShieldCheck,
+  Sparkles,
+  TrendingUp,
+  Wallet,
+} from "lucide-react";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import { HeroBackground } from "@/components/landing/hero-background";
+import { DashboardPreview } from "@/components/landing/dashboard-preview";
+import type { GetServerSideProps } from "next";
+import { getServerSession } from "@/lib/session";
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+const SITE_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://paytrack.app";
+const SITE_TITLE = "PayTrack — Never miss an EMI or bill payment";
+const SITE_DESCRIPTION =
+  "Track EMIs, loans, credit card bills, and recurring payments in one beautiful dashboard. Get reminders before every due date, see analytics that matter, and keep a permanent payment history — all from data you enter yourself, with no bank or card connections required.";
 
-export default function Home() {
+const features = [
+  {
+    icon: Wallet,
+    title: "Track every loan and bill",
+    description:
+      "Home loans, personal loans, credit cards, and manual bills — all in one organized view.",
+  },
+  {
+    icon: BellRing,
+    title: "Reminders that actually work",
+    description:
+      "Email nudges 7, 3, and 1 day before every due date, plus on the day itself.",
+  },
+  {
+    icon: TrendingUp,
+    title: "Analytics that matter",
+    description:
+      "See EMI trends, outstanding balances, and category breakdowns at a glance.",
+  },
+  {
+    icon: ShieldCheck,
+    title: "Auditable payment history",
+    description:
+      "Every payment is a permanent record — never just a checkbox you can un-check.",
+  },
+];
+
+const steps = [
+  {
+    icon: ClipboardList,
+    title: "Add what you're paying off",
+    description:
+      "Enter your loans, EMIs, and credit cards yourself — principal, interest rate, tenure, due date. Takes under a minute each.",
+  },
+  {
+    icon: BellRing,
+    title: "Get reminded before it's due",
+    description:
+      "PayTrack tracks due dates for you and nudges you 7, 3, and 1 day before, so nothing sneaks up on you.",
+  },
+  {
+    icon: CheckCircle2,
+    title: "Mark it paid, build your history",
+    description:
+      "Confirm a payment and it's logged permanently — a real record you can review, filter, and export anytime.",
+  },
+];
+
+const faqs = [
+  {
+    question: "Does PayTrack connect to my bank or cards?",
+    answer:
+      "No — never. PayTrack doesn't connect to any bank, card network, or payment gateway. Every loan, bill, and payment is entered by you, and a payment is only ever recorded when you explicitly confirm it with the \"Mark Paid\" action. No money moves through PayTrack, and it can't move money on your behalf.",
+  },
+  {
+    question: "Is my financial data shared with anyone?",
+    answer:
+      "Your data is yours. PayTrack stores what you enter to power your own dashboard, reminders, and analytics — it isn't sold or shared with third parties.",
+  },
+  {
+    question: "What can I track with PayTrack?",
+    answer:
+      "Home loans, personal loans, car loans, bike loans, and credit card EMIs, plus manual recurring bills like rent, electricity, internet, insurance, and informal debts like money borrowed from friends or family.",
+  },
+  {
+    question: "Is PayTrack free?",
+    answer:
+      "Yes. PayTrack is a self-tracking tool, not a payment processor, so there's no transaction fee to charge — it's free to use.",
+  },
+  {
+    question: "What if I forget to mark a payment as paid?",
+    answer:
+      "PayTrack flags anything past its due date as overdue on your dashboard, so it stays visible until you resolve it — nothing silently disappears.",
+  },
+];
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  name: "PayTrack",
+  url: SITE_URL,
+  description: SITE_DESCRIPTION,
+  applicationCategory: "FinanceApplication",
+  operatingSystem: "Any (Web)",
+  offers: {
+    "@type": "Offer",
+    price: "0",
+    priceCurrency: "USD",
+  },
+};
+
+export default function LandingPage() {
   return (
-    <div
-      className={`${geistSans.variable} ${geistMono.variable} flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black`}
-    >
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
+    <div className="relative min-h-svh overflow-hidden bg-background">
+      <Head>
+        <title>{SITE_TITLE}</title>
+        <meta name="description" content={SITE_DESCRIPTION} />
+        <meta
+          name="keywords"
+          content="EMI tracker, loan tracker, bill reminder, payment tracker, personal finance, expense tracker"
         />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              index.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+        <link rel="canonical" href={SITE_URL} />
+        <meta name="robots" content="index, follow" />
+
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="PayTrack" />
+        <meta property="og:title" content={SITE_TITLE} />
+        <meta property="og:description" content={SITE_DESCRIPTION} />
+        <meta property="og:url" content={SITE_URL} />
+        <meta property="og:locale" content="en_US" />
+
+        <meta name="twitter:card" content="summary" />
+        <meta name="twitter:title" content={SITE_TITLE} />
+        <meta name="twitter:description" content={SITE_DESCRIPTION} />
+
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </Head>
+
+      <HeroBackground />
+
+      <header className="mx-auto flex max-w-6xl items-center justify-between px-6 py-6">
+        <div className="flex items-center gap-2 font-semibold">
+          <span className="flex size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+            <Wallet className="size-4" />
+          </span>
+          PayTrack
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+        <nav className="flex items-center gap-2">
+          <Button variant="ghost" asChild>
+            <Link href="/login">Sign in</Link>
+          </Button>
+          <Button asChild>
+            <Link href="/register">
+              Get started
+              <ArrowRight className="size-4" />
+            </Link>
+          </Button>
+        </nav>
+      </header>
+
+      <main className="mx-auto max-w-6xl px-6">
+        <section className="grid grid-cols-1 items-center gap-12 py-20 sm:py-24 lg:grid-cols-2 lg:gap-8 lg:py-28">
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, ease: "easeOut" }}
+            className="text-center lg:text-left"
           >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs/pages/getting-started?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
+            <div className="mx-auto mb-5 flex w-fit items-center gap-1.5 rounded-full border bg-card px-3 py-1 text-xs font-medium text-muted-foreground lg:mx-0">
+              <Sparkles className="size-3.5 text-primary" />
+              Free, private, and 100% manual — no bank connections, ever
+            </div>
+            <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">
+              Every payment, on time.
+              <span className="block text-primary">Every time.</span>
+            </h1>
+            <p className="mx-auto mt-5 max-w-lg text-lg text-muted-foreground lg:mx-0">
+              PayTrack keeps your EMIs, loans, credit card bills, and recurring
+              payments organized — with reminders, analytics, and a full payment
+              history you can trust.
+            </p>
+            <div className="mt-8 flex items-center justify-center gap-3 lg:justify-start">
+              <Button size="lg" asChild>
+                <Link href="/register">
+                  Start tracking for free
+                  <ArrowRight className="size-4" />
+                </Link>
+              </Button>
+              <Button size="lg" variant="outline" asChild>
+                <Link href="/login">Sign in</Link>
+              </Button>
+            </div>
+          </motion.div>
+
+          <DashboardPreview />
+        </section>
+
+        <section className="grid grid-cols-1 gap-4 pb-24 sm:grid-cols-2 lg:grid-cols-4">
+          {features.map((feature, i) => (
+            <motion.div
+              key={feature.title}
+              initial={{ opacity: 0, y: 12 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-40px" }}
+              transition={{ duration: 0.35, delay: i * 0.05 }}
+            >
+              <Card className="h-full">
+                <CardHeader>
+                  <span className="mb-2 flex size-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                    <feature.icon className="size-5" />
+                  </span>
+                  <CardTitle className="text-base">{feature.title}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-muted-foreground">
+                    {feature.description}
+                  </p>
+                </CardContent>
+              </Card>
+            </motion.div>
+          ))}
+        </section>
+
+        <section className="pb-24">
+          <div className="mx-auto max-w-2xl text-center">
+            <h2 className="text-3xl font-semibold tracking-tight">How it works</h2>
+            <p className="mt-3 text-muted-foreground">
+              No setup, no linking accounts — just you and your payments.
+            </p>
+          </div>
+          <div className="mt-12 grid grid-cols-1 gap-8 sm:grid-cols-3">
+            {steps.map((step, i) => (
+              <motion.div
+                key={step.title}
+                initial={{ opacity: 0, y: 12 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-40px" }}
+                transition={{ duration: 0.35, delay: i * 0.08 }}
+                className="relative text-center"
+              >
+                <div className="mx-auto mb-4 flex size-12 items-center justify-center rounded-2xl bg-primary text-primary-foreground">
+                  <step.icon className="size-5" />
+                </div>
+                <p className="text-xs font-semibold text-primary">STEP {i + 1}</p>
+                <h3 className="mt-1 text-base font-medium">{step.title}</h3>
+                <p className="mt-2 text-sm text-muted-foreground">{step.description}</p>
+              </motion.div>
+            ))}
+          </div>
+        </section>
+
+        <motion.section
+          initial={{ opacity: 0, y: 12 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-40px" }}
+          transition={{ duration: 0.35 }}
+          className="mb-24 overflow-hidden rounded-3xl border bg-card"
+        >
+          <div className="grid grid-cols-1 items-center gap-8 p-8 sm:p-12 lg:grid-cols-2">
+            <div>
+              <span className="flex size-11 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                <Lock className="size-5" />
+              </span>
+              <h2 className="mt-4 text-2xl font-semibold tracking-tight">
+                Built to be offline by design
+              </h2>
+              <p className="mt-3 text-muted-foreground">
+                PayTrack never asks for your bank login, card number, or any
+                payment credential — because it never needs one. It&apos;s a
+                self-tracking ledger: you type in what you owe, and you tell
+                it when you&apos;ve paid. That&apos;s the whole model.
+              </p>
+            </div>
+            <ul className="space-y-3">
+              {[
+                "No bank or card account linking",
+                "No payment gateway — PayTrack never moves money",
+                "Every payment requires your explicit confirmation",
+                "Your data powers your dashboard, nothing else",
+              ].map((item) => (
+                <li key={item} className="flex items-start gap-3 text-sm">
+                  <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-primary" />
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </motion.section>
+
+        <section className="mb-24">
+          <div className="mx-auto max-w-2xl text-center">
+            <h2 className="text-3xl font-semibold tracking-tight">
+              Frequently asked questions
+            </h2>
+          </div>
+          <div className="mx-auto mt-10 max-w-2xl">
+            <Accordion type="single" collapsible>
+              {faqs.map((faq) => (
+                <AccordionItem key={faq.question} value={faq.question}>
+                  <AccordionTrigger className="text-left">
+                    {faq.question}
+                  </AccordionTrigger>
+                  <AccordionContent className="text-muted-foreground">
+                    {faq.answer}
+                  </AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
+          </div>
+        </section>
+
+        <motion.section
+          initial={{ opacity: 0, y: 12 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-40px" }}
+          transition={{ duration: 0.35 }}
+          className="relative mb-24 overflow-hidden rounded-3xl bg-primary px-8 py-16 text-center text-primary-foreground sm:px-12"
+        >
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 opacity-20"
+            style={{
+              backgroundImage:
+                "linear-gradient(to right, white 1px, transparent 1px), linear-gradient(to bottom, white 1px, transparent 1px)",
+              backgroundSize: "40px 40px",
+              maskImage: "radial-gradient(ellipse 60% 100% at 50% 50%, black, transparent)",
+              WebkitMaskImage:
+                "radial-gradient(ellipse 60% 100% at 50% 50%, black, transparent)",
+            }}
+          />
+          <div
+            aria-hidden
+            className="pointer-events-none absolute -top-24 left-1/2 size-[420px] -translate-x-1/2 rounded-full bg-white/10 blur-3xl"
+          />
+          <div className="relative">
+            <h2 className="text-3xl font-semibold tracking-tight">
+              Start tracking in the next minute
+            </h2>
+            <p className="mx-auto mt-3 max-w-md text-primary-foreground/80">
+              No bank connections, no card details, no waiting. Just add your
+              first loan or bill and see your dashboard come to life.
+            </p>
+            <Button size="lg" variant="secondary" className="mt-8" asChild>
+              <Link href="/register">
+                Create your free account
+                <ArrowRight className="size-4" />
+              </Link>
+            </Button>
+          </div>
+        </motion.section>
       </main>
+
+      <footer className="border-t py-8 text-center text-sm text-muted-foreground">
+        &copy; {new Date().getFullYear()} PayTrack. All rights reserved.
+      </footer>
     </div>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const session = await getServerSession(ctx.req);
+  if (session) {
+    return { redirect: { destination: "/dashboard", permanent: false } };
+  }
+  return { props: {} };
+};

@@ -1,0 +1,13 @@
+User-agent: *
+Allow: /
+Disallow: /dashboard
+Disallow: /tracking-items
+Disallow: /payables
+Disallow: /payment-history
+Disallow: /analytics
+Disallow: /notifications
+Disallow: /profile
+Disallow: /settings
+Disallow: /api/
+
+Sitemap: /sitemap.xml
