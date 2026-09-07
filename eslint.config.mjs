@@ -27,6 +27,14 @@ const eslintConfig = [
   },
   ...compat.extends("prettier"),
   {
+    // CLI-only scripts (never imported by app runtime code) whose entire job
+    // is reporting progress to the terminal.
+    files: ["src/db/seed.ts", "src/db/sync.ts", "src/db/migrate.ts"],
+    rules: {
+      "no-console": "off",
+    },
+  },
+  {
     ignores: [".next/**", "out/**", "build/**", "next-env.d.ts"],
   },
 ];

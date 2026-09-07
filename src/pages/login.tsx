@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { useQueryClient } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 import type { GetServerSideProps } from "next";
@@ -26,6 +27,7 @@ import { getServerSession } from "@/lib/session";
 
 export default function LoginPage() {
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   const form = useForm<LoginInput>({
     resolver: zodResolver(loginSchema),
@@ -43,6 +45,10 @@ export default function LoginPage() {
       toast.error(error.message ?? "Invalid email or password");
       return;
     }
+
+    // Defensive: drop any cached queries from a previous session on this
+    // device (e.g. someone else's data left over from a non-logout exit).
+    queryClient.clear();
 
     const returnTo =
       typeof router.query.returnTo === "string" ? router.query.returnTo : "/dashboard";

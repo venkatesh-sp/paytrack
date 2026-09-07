@@ -4,17 +4,20 @@ import type {
   UpdateTrackingItemInput,
 } from "@/lib/validations/tracking-item";
 import type { TrackingItem } from "@/db/schema";
+import type { TrackingItemWithEmiCounts } from "@/server/services/tracking-items";
 
 export function fetchTrackingItems(filters?: { status?: string; type?: string }) {
   const params = new URLSearchParams();
   if (filters?.status) params.set("status", filters.status);
   if (filters?.type) params.set("type", filters.type);
   const qs = params.toString();
-  return apiFetch<{ items: TrackingItem[] }>(`/api/tracking-items${qs ? `?${qs}` : ""}`);
+  return apiFetch<{ items: TrackingItemWithEmiCounts[] }>(
+    `/api/tracking-items${qs ? `?${qs}` : ""}`,
+  );
 }
 
 export function fetchTrackingItem(id: string) {
-  return apiFetch<{ item: TrackingItem }>(`/api/tracking-items/${id}`);
+  return apiFetch<{ item: TrackingItemWithEmiCounts }>(`/api/tracking-items/${id}`);
 }
 
 export function createTrackingItemRequest(input: CreateTrackingItemInput) {

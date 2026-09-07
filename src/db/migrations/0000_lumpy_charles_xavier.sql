@@ -1,3 +1,4 @@
+CREATE TYPE "public"."lending_transaction_type" AS ENUM('you_gave', 'you_got');--> statement-breakpoint
 CREATE TYPE "public"."notification_channel" AS ENUM('email', 'browser', 'push', 'whatsapp', 'sms');--> statement-breakpoint
 CREATE TYPE "public"."payable_category" AS ENUM('emi', 'credit_card_bill', 'borrowed_amount', 'friend_loan', 'electricity_bill', 'internet_bill', 'water_bill', 'insurance', 'rent', 'miscellaneous');--> statement-breakpoint
 CREATE TYPE "public"."payable_source" AS ENUM('tracking_item', 'manual');--> statement-breakpoint
@@ -34,7 +35,7 @@ CREATE TABLE "session" (
 	CONSTRAINT "session_token_unique" UNIQUE("token")
 );
 --> statement-breakpoint
-CREATE TABLE "user" (
+CREATE TABLE "users" (
 	"id" text PRIMARY KEY NOT NULL,
 	"name" text NOT NULL,
 	"email" text NOT NULL,
@@ -45,7 +46,7 @@ CREATE TABLE "user" (
 	"first_name" text NOT NULL,
 	"last_name" text NOT NULL,
 	"phone" text,
-	CONSTRAINT "user_email_unique" UNIQUE("email")
+	CONSTRAINT "users_email_unique" UNIQUE("email")
 );
 --> statement-breakpoint
 CREATE TABLE "verification" (
@@ -74,6 +75,7 @@ CREATE TABLE "tracking_item" (
 	"start_date" date NOT NULL,
 	"end_date" date NOT NULL,
 	"notes" text,
+	"emi_paid" integer DEFAULT 0 NOT NULL,
 	"created_at" timestamp DEFAULT now() NOT NULL,
 	"updated_at" timestamp DEFAULT now() NOT NULL
 );
@@ -140,17 +142,42 @@ CREATE TABLE "reminder_log" (
 	"sent_at" timestamp DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
-ALTER TABLE "account" ADD CONSTRAINT "account_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "session" ADD CONSTRAINT "session_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "tracking_item" ADD CONSTRAINT "tracking_item_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "monthly_payable" ADD CONSTRAINT "monthly_payable_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+CREATE TABLE "lending_contact" (
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"user_id" text NOT NULL,
+	"name" text NOT NULL,
+	"phone" text,
+	"notes" text,
+	"balance" numeric(14, 2) DEFAULT '0' NOT NULL,
+	"created_at" timestamp DEFAULT now() NOT NULL,
+	"updated_at" timestamp DEFAULT now() NOT NULL
+);
+--> statement-breakpoint
+CREATE TABLE "lending_transaction" (
+	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+	"user_id" text NOT NULL,
+	"contact_id" uuid NOT NULL,
+	"type" "lending_transaction_type" NOT NULL,
+	"amount" numeric(14, 2) NOT NULL,
+	"transaction_date" date NOT NULL,
+	"note" text,
+	"created_at" timestamp DEFAULT now() NOT NULL
+);
+--> statement-breakpoint
+ALTER TABLE "account" ADD CONSTRAINT "account_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "session" ADD CONSTRAINT "session_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "tracking_item" ADD CONSTRAINT "tracking_item_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "monthly_payable" ADD CONSTRAINT "monthly_payable_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "monthly_payable" ADD CONSTRAINT "monthly_payable_tracking_item_id_tracking_item_id_fk" FOREIGN KEY ("tracking_item_id") REFERENCES "public"."tracking_item"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "payment_history" ADD CONSTRAINT "payment_history_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "payment_history" ADD CONSTRAINT "payment_history_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "payment_history" ADD CONSTRAINT "payment_history_monthly_payable_id_monthly_payable_id_fk" FOREIGN KEY ("monthly_payable_id") REFERENCES "public"."monthly_payable"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "payment_history" ADD CONSTRAINT "payment_history_tracking_item_id_tracking_item_id_fk" FOREIGN KEY ("tracking_item_id") REFERENCES "public"."tracking_item"("id") ON DELETE set null ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "notification_preference" ADD CONSTRAINT "notification_preference_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "reminder_log" ADD CONSTRAINT "reminder_log_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."user"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "notification_preference" ADD CONSTRAINT "notification_preference_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "reminder_log" ADD CONSTRAINT "reminder_log_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "reminder_log" ADD CONSTRAINT "reminder_log_monthly_payable_id_monthly_payable_id_fk" FOREIGN KEY ("monthly_payable_id") REFERENCES "public"."monthly_payable"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "lending_contact" ADD CONSTRAINT "lending_contact_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "lending_transaction" ADD CONSTRAINT "lending_transaction_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "lending_transaction" ADD CONSTRAINT "lending_transaction_contact_id_lending_contact_id_fk" FOREIGN KEY ("contact_id") REFERENCES "public"."lending_contact"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 CREATE INDEX "account_userId_idx" ON "account" USING btree ("user_id");--> statement-breakpoint
 CREATE INDEX "session_userId_idx" ON "session" USING btree ("user_id");--> statement-breakpoint
 CREATE INDEX "verification_identifier_idx" ON "verification" USING btree ("identifier");--> statement-breakpoint
@@ -166,4 +193,7 @@ CREATE INDEX "payment_history_payable_idx" ON "payment_history" USING btree ("mo
 CREATE INDEX "payment_history_tracking_item_idx" ON "payment_history" USING btree ("tracking_item_id");--> statement-breakpoint
 CREATE INDEX "notification_preference_user_idx" ON "notification_preference" USING btree ("user_id");--> statement-breakpoint
 CREATE INDEX "reminder_log_user_idx" ON "reminder_log" USING btree ("user_id");--> statement-breakpoint
-CREATE UNIQUE INDEX "reminder_log_dedupe_uidx" ON "reminder_log" USING btree ("monthly_payable_id","reminder_type","channel");
+CREATE UNIQUE INDEX "reminder_log_dedupe_uidx" ON "reminder_log" USING btree ("monthly_payable_id","reminder_type","channel");--> statement-breakpoint
+CREATE INDEX "lending_contact_user_idx" ON "lending_contact" USING btree ("user_id");--> statement-breakpoint
+CREATE INDEX "lending_transaction_user_idx" ON "lending_transaction" USING btree ("user_id");--> statement-breakpoint
+CREATE INDEX "lending_transaction_contact_idx" ON "lending_transaction" USING btree ("contact_id");

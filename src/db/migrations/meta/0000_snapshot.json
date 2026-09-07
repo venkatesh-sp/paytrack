@@ -1,5 +1,5 @@
 {
-  "id": "8baf87f5-2e21-4dac-afbc-4bec874c5bb1",
+  "id": "b838a82f-db61-4b3e-854c-d4183ec0a473",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -106,10 +106,10 @@
         }
       },
       "foreignKeys": {
-        "account_user_id_user_id_fk": {
-          "name": "account_user_id_user_id_fk",
+        "account_user_id_users_id_fk": {
+          "name": "account_user_id_users_id_fk",
           "tableFrom": "account",
-          "tableTo": "user",
+          "tableTo": "users",
           "columnsFrom": [
             "user_id"
           ],
@@ -198,10 +198,10 @@
         }
       },
       "foreignKeys": {
-        "session_user_id_user_id_fk": {
-          "name": "session_user_id_user_id_fk",
+        "session_user_id_users_id_fk": {
+          "name": "session_user_id_users_id_fk",
           "tableFrom": "session",
-          "tableTo": "user",
+          "tableTo": "users",
           "columnsFrom": [
             "user_id"
           ],
@@ -226,8 +226,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.user": {
-      "name": "user",
+    "public.users": {
+      "name": "users",
       "schema": "",
       "columns": {
         "id": {
@@ -298,8 +298,8 @@
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "user_email_unique": {
-          "name": "user_email_unique",
+        "users_email_unique": {
+          "name": "users_email_unique",
           "nullsNotDistinct": false,
           "columns": [
             "email"
@@ -481,6 +481,13 @@
           "primaryKey": false,
           "notNull": false
         },
+        "emi_paid": {
+          "name": "emi_paid",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "default": 0
+        },
         "created_at": {
           "name": "created_at",
           "type": "timestamp",
@@ -556,10 +563,10 @@
         }
       },
       "foreignKeys": {
-        "tracking_item_user_id_user_id_fk": {
-          "name": "tracking_item_user_id_user_id_fk",
+        "tracking_item_user_id_users_id_fk": {
+          "name": "tracking_item_user_id_users_id_fk",
           "tableFrom": "tracking_item",
-          "tableTo": "user",
+          "tableTo": "users",
           "columnsFrom": [
             "user_id"
           ],
@@ -761,10 +768,10 @@
         }
       },
       "foreignKeys": {
-        "monthly_payable_user_id_user_id_fk": {
-          "name": "monthly_payable_user_id_user_id_fk",
+        "monthly_payable_user_id_users_id_fk": {
+          "name": "monthly_payable_user_id_users_id_fk",
           "tableFrom": "monthly_payable",
-          "tableTo": "user",
+          "tableTo": "users",
           "columnsFrom": [
             "user_id"
           ],
@@ -927,10 +934,10 @@
         }
       },
       "foreignKeys": {
-        "payment_history_user_id_user_id_fk": {
-          "name": "payment_history_user_id_user_id_fk",
+        "payment_history_user_id_users_id_fk": {
+          "name": "payment_history_user_id_users_id_fk",
           "tableFrom": "payment_history",
-          "tableTo": "user",
+          "tableTo": "users",
           "columnsFrom": [
             "user_id"
           ],
@@ -1093,10 +1100,10 @@
         }
       },
       "foreignKeys": {
-        "notification_preference_user_id_user_id_fk": {
-          "name": "notification_preference_user_id_user_id_fk",
+        "notification_preference_user_id_users_id_fk": {
+          "name": "notification_preference_user_id_users_id_fk",
           "tableFrom": "notification_preference",
-          "tableTo": "user",
+          "tableTo": "users",
           "columnsFrom": [
             "user_id"
           ],
@@ -1226,10 +1233,10 @@
         }
       },
       "foreignKeys": {
-        "reminder_log_user_id_user_id_fk": {
-          "name": "reminder_log_user_id_user_id_fk",
+        "reminder_log_user_id_users_id_fk": {
+          "name": "reminder_log_user_id_users_id_fk",
           "tableFrom": "reminder_log",
-          "tableTo": "user",
+          "tableTo": "users",
           "columnsFrom": [
             "user_id"
           ],
@@ -1258,9 +1265,234 @@
       "policies": {},
       "checkConstraints": {},
       "isRLSEnabled": false
+    },
+    "public.lending_contact": {
+      "name": "lending_contact",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "phone": {
+          "name": "phone",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "notes": {
+          "name": "notes",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "balance": {
+          "name": "balance",
+          "type": "numeric(14, 2)",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'0'"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "lending_contact_user_idx": {
+          "name": "lending_contact_user_idx",
+          "columns": [
+            {
+              "expression": "user_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "lending_contact_user_id_users_id_fk": {
+          "name": "lending_contact_user_id_users_id_fk",
+          "tableFrom": "lending_contact",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.lending_transaction": {
+      "name": "lending_transaction",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "contact_id": {
+          "name": "contact_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "type": {
+          "name": "type",
+          "type": "lending_transaction_type",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "amount": {
+          "name": "amount",
+          "type": "numeric(14, 2)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "transaction_date": {
+          "name": "transaction_date",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "note": {
+          "name": "note",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "lending_transaction_user_idx": {
+          "name": "lending_transaction_user_idx",
+          "columns": [
+            {
+              "expression": "user_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "lending_transaction_contact_idx": {
+          "name": "lending_transaction_contact_idx",
+          "columns": [
+            {
+              "expression": "contact_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "lending_transaction_user_id_users_id_fk": {
+          "name": "lending_transaction_user_id_users_id_fk",
+          "tableFrom": "lending_transaction",
+          "tableTo": "users",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "lending_transaction_contact_id_lending_contact_id_fk": {
+          "name": "lending_transaction_contact_id_lending_contact_id_fk",
+          "tableFrom": "lending_transaction",
+          "tableTo": "lending_contact",
+          "columnsFrom": [
+            "contact_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
     }
   },
   "enums": {
+    "public.lending_transaction_type": {
+      "name": "lending_transaction_type",
+      "schema": "public",
+      "values": [
+        "you_gave",
+        "you_got"
+      ]
+    },
     "public.notification_channel": {
       "name": "notification_channel",
       "schema": "public",

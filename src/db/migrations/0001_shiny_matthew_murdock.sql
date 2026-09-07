@@ -1,0 +1,1 @@
+ALTER TABLE "tracking_item" DROP COLUMN "emi_paid";

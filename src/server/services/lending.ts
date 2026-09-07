@@ -1,4 +1,4 @@
-import { and, desc, eq } from "drizzle-orm";
+import { and, desc, eq, gte, sql } from "drizzle-orm";
 import { db } from "@/db";
 import {
   lendingContact,
@@ -196,4 +196,62 @@ export async function deleteLendingTransaction(
 
     return updatedContact;
   });
+}
+
+export type LendingSummary = {
+  totalOwedToYou: number;
+  totalYouOwe: number;
+  owedTrend: number;
+  oweTrend: number;
+};
+
+export async function getLendingSummary(userId: string): Promise<LendingSummary> {
+  const cutoff = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)
+    .toISOString()
+    .slice(0, 10);
+
+  const contacts = await db
+    .select({ id: lendingContact.id, balance: lendingContact.balance })
+    .from(lendingContact)
+    .where(eq(lendingContact.userId, userId));
+
+  const recentDeltas = await db
+    .select({
+      contactId: lendingTransaction.contactId,
+      delta: sql<string>`sum(case when ${lendingTransaction.type} = 'you_gave' then ${lendingTransaction.amount} else -${lendingTransaction.amount} end)`,
+    })
+    .from(lendingTransaction)
+    .where(
+      and(
+        eq(lendingTransaction.userId, userId),
+        gte(lendingTransaction.transactionDate, cutoff),
+      ),
+    )
+    .groupBy(lendingTransaction.contactId);
+
+  const deltaByContact = new Map(
+    recentDeltas.map((row) => [row.contactId, Number(row.delta)]),
+  );
+
+  let totalOwedToYou = 0;
+  let totalYouOwe = 0;
+  let totalOwedToYou30dAgo = 0;
+  let totalYouOwe30dAgo = 0;
+
+  for (const contact of contacts) {
+    const balance = Number(contact.balance);
+    const balance30dAgo = balance - (deltaByContact.get(contact.id) ?? 0);
+
+    totalOwedToYou += Math.max(balance, 0);
+    totalYouOwe += Math.max(-balance, 0);
+    totalOwedToYou30dAgo += Math.max(balance30dAgo, 0);
+    totalYouOwe30dAgo += Math.max(-balance30dAgo, 0);
+  }
+
+  return {
+    totalOwedToYou,
+    totalYouOwe,
+    owedTrend: totalOwedToYou - totalOwedToYou30dAgo,
+    oweTrend: totalYouOwe - totalYouOwe30dAgo,
+  };
 }

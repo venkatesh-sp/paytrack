@@ -18,7 +18,9 @@ import { Button } from "@/components/ui/button";
 import { MetricCard } from "@/components/dashboard/metric-card";
 import { ExportButton } from "@/components/export-button";
 import { PaidVsPendingBar } from "@/components/analytics/paid-vs-pending-bar";
+import { TrackingItemMultiSelect } from "@/components/analytics/tracking-item-multi-select";
 import { useAnalytics } from "@/hooks/use-analytics";
+import { useTrackingItems } from "@/hooks/use-tracking-items";
 import { formatCurrency, trackingItemTypeLabels } from "@/lib/format";
 import { trackingItemTypeValues } from "@/lib/validations/tracking-item";
 import { withAuth } from "@/lib/with-auth";
@@ -34,19 +36,36 @@ const CategoryDistributionChart = dynamic(
     ),
   { ssr: false, loading: () => <Skeleton className="h-40 w-full" /> },
 );
+const TrackingItemDistributionPie = dynamic(
+  () =>
+    import("@/components/analytics/tracking-item-distribution-pie").then(
+      (m) => m.TrackingItemDistributionPie,
+    ),
+  { ssr: false, loading: () => <Skeleton className="h-64 w-full" /> },
+);
 
 const currentYear = new Date().getFullYear();
-const YEAR_OPTIONS = [currentYear, currentYear - 1, currentYear - 2];
+const YEAR_OPTIONS = [
+  currentYear,
+  currentYear - 1,
+  currentYear - 2,
+  currentYear - 3,
+  currentYear - 4,
+];
 
 export default function AnalyticsPage() {
   const [year, setYear] = useState(currentYear);
   const [month, setMonth] = useState("");
   const [type, setType] = useState<string>("all");
+  const [trackingItemIds, setTrackingItemIds] = useState<string[]>([]);
+
+  const { data: trackingItems } = useTrackingItems();
 
   const { data, isLoading, isError } = useAnalytics({
     year: month ? undefined : year,
     month: month || undefined,
     type: type === "all" ? undefined : type,
+    trackingItemIds: trackingItemIds.length > 0 ? trackingItemIds : undefined,
   });
 
   return (
@@ -117,6 +136,12 @@ export default function AnalyticsPage() {
             ))}
           </SelectContent>
         </Select>
+
+        <TrackingItemMultiSelect
+          items={trackingItems ?? []}
+          selectedIds={trackingItemIds}
+          onChange={setTrackingItemIds}
+        />
       </div>
 
       {isError && (
@@ -215,6 +240,21 @@ export default function AnalyticsPage() {
                   paid={data.paidVsPending.paid}
                   pending={data.paidVsPending.pending}
                 />
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-base">Tracking Items</CardTitle>
+              </CardHeader>
+              <CardContent>
+                {data.trackingItemDistribution.length === 0 ? (
+                  <p className="text-muted-foreground text-sm">
+                    No payables in this period.
+                  </p>
+                ) : (
+                  <TrackingItemDistributionPie data={data.trackingItemDistribution} />
+                )}
               </CardContent>
             </Card>
           </div>

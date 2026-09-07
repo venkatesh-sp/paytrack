@@ -9,31 +9,44 @@ function toNumber(value: string | number | null | undefined): number {
   return Number.isFinite(num) ? num : 0;
 }
 
-function lastNPeriods(n: number): string[] {
-  const periods: string[] = [];
-  const now = new Date();
-  for (let i = n - 1; i >= 0; i--) {
-    const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
-    periods.push(`${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`);
-  }
-  return periods;
+function periodsForYear(year: number): string[] {
+  return Array.from(
+    { length: 12 },
+    (_, i) => `${year}-${String(i + 1).padStart(2, "0")}`,
+  );
 }
 
-async function trackingItemIdsForType(
+/**
+ * Resolves the set of tracking-item ids every analytics query should be
+ * scoped to, combining the type filter and the explicit multi-select
+ * tracking-item filter (both, when both are given). Returns null when
+ * neither filter is set, meaning "every tracking item" — callers must treat
+ * that distinctly from an empty array (which means "none match").
+ */
+async function resolveTrackingItemIds(
   userId: string,
-  type?: string,
+  filters: AnalyticsFilters,
 ): Promise<string[] | null> {
-  if (!type) return null;
+  if (!filters.type && !filters.trackingItemIds?.length) return null;
+
+  const conditions = [eq(trackingItem.userId, userId)];
+  if (filters.type) {
+    conditions.push(eq(trackingItem.type, filters.type as never));
+  }
+  if (filters.trackingItemIds?.length) {
+    conditions.push(inArray(trackingItem.id, filters.trackingItemIds));
+  }
+
   const items = await db
     .select({ id: trackingItem.id })
     .from(trackingItem)
-    .where(and(eq(trackingItem.userId, userId), eq(trackingItem.type, type as never)));
+    .where(and(...conditions));
   return items.map((i) => i.id);
 }
 
 export async function getMonthlyEmiTrend(userId: string, filters: AnalyticsFilters) {
-  const periods = lastNPeriods(12);
-  const itemIds = await trackingItemIdsForType(userId, filters.type);
+  const periods = periodsForYear(filters.year ?? new Date().getFullYear());
+  const itemIds = await resolveTrackingItemIds(userId, filters);
 
   const conditions = [
     eq(monthlyPayable.userId, userId),
@@ -60,8 +73,8 @@ export async function getMonthlyEmiTrend(userId: string, filters: AnalyticsFilte
 }
 
 export async function getOutstandingTrend(userId: string, filters: AnalyticsFilters) {
-  const periods = lastNPeriods(12);
-  const itemIds = await trackingItemIdsForType(userId, filters.type);
+  const periods = periodsForYear(filters.year ?? new Date().getFullYear());
+  const itemIds = await resolveTrackingItemIds(userId, filters);
 
   const itemConditions = [eq(trackingItem.userId, userId)];
   if (itemIds !== null) {
@@ -107,7 +120,7 @@ export async function getOutstandingTrend(userId: string, filters: AnalyticsFilt
 export async function getCategoryDistribution(userId: string, filters: AnalyticsFilters) {
   const period = filters.month ?? null;
   const year = filters.year ?? new Date().getFullYear();
-  const itemIds = await trackingItemIdsForType(userId, filters.type);
+  const itemIds = await resolveTrackingItemIds(userId, filters);
 
   const conditions = [eq(monthlyPayable.userId, userId)];
   if (period) {
@@ -133,10 +146,55 @@ export async function getCategoryDistribution(userId: string, filters: Analytics
   return rows.map((r) => ({ category: r.category, amount: toNumber(r.total) }));
 }
 
+/**
+ * Amount owed per tracking item within the selected period — a part-to-whole
+ * breakdown for the "Tracking Items" pie chart. Naturally reflects the
+ * multi-select tracking-item filter (and the type filter) via
+ * `resolveTrackingItemIds`, same as every other analytics query, so
+ * selecting specific items narrows this chart to just those items.
+ */
+export async function getTrackingItemDistribution(
+  userId: string,
+  filters: AnalyticsFilters,
+) {
+  const period = filters.month ?? null;
+  const year = filters.year ?? new Date().getFullYear();
+  const itemIds = await resolveTrackingItemIds(userId, filters);
+
+  const conditions = [eq(monthlyPayable.userId, userId)];
+  if (period) {
+    conditions.push(eq(monthlyPayable.billingPeriod, period));
+  } else {
+    conditions.push(sql`${monthlyPayable.billingPeriod} like ${year + "-%"}`);
+  }
+  if (itemIds !== null) {
+    conditions.push(
+      itemIds.length > 0 ? inArray(monthlyPayable.trackingItemId, itemIds) : sql`false`,
+    );
+  }
+
+  const rows = await db
+    .select({
+      trackingItemId: trackingItem.id,
+      name: trackingItem.name,
+      total: sql<string>`sum(${monthlyPayable.amount})`,
+    })
+    .from(monthlyPayable)
+    .innerJoin(trackingItem, eq(monthlyPayable.trackingItemId, trackingItem.id))
+    .where(and(...conditions))
+    .groupBy(trackingItem.id, trackingItem.name);
+
+  return rows.map((r) => ({
+    id: r.trackingItemId,
+    name: r.name,
+    amount: toNumber(r.total),
+  }));
+}
+
 export async function getPaidVsPending(userId: string, filters: AnalyticsFilters) {
   const period = filters.month ?? null;
   const year = filters.year ?? new Date().getFullYear();
-  const itemIds = await trackingItemIdsForType(userId, filters.type);
+  const itemIds = await resolveTrackingItemIds(userId, filters);
 
   const conditions = [eq(monthlyPayable.userId, userId)];
   if (period) {
@@ -165,7 +223,7 @@ export async function getPaidVsPending(userId: string, filters: AnalyticsFilters
 
 export async function getYearlySummary(userId: string, filters: AnalyticsFilters) {
   const year = filters.year ?? new Date().getFullYear();
-  const itemIds = await trackingItemIdsForType(userId, filters.type);
+  const itemIds = await resolveTrackingItemIds(userId, filters);
 
   const conditions = [
     eq(monthlyPayable.userId, userId),
@@ -200,19 +258,27 @@ export async function getYearlySummary(userId: string, filters: AnalyticsFilters
 }
 
 export async function getAnalytics(userId: string, filters: AnalyticsFilters) {
-  const [emiTrend, outstandingTrend, categoryDistribution, paidVsPending, yearlySummary] =
-    await Promise.all([
-      getMonthlyEmiTrend(userId, filters),
-      getOutstandingTrend(userId, filters),
-      getCategoryDistribution(userId, filters),
-      getPaidVsPending(userId, filters),
-      getYearlySummary(userId, filters),
-    ]);
+  const [
+    emiTrend,
+    outstandingTrend,
+    categoryDistribution,
+    trackingItemDistribution,
+    paidVsPending,
+    yearlySummary,
+  ] = await Promise.all([
+    getMonthlyEmiTrend(userId, filters),
+    getOutstandingTrend(userId, filters),
+    getCategoryDistribution(userId, filters),
+    getTrackingItemDistribution(userId, filters),
+    getPaidVsPending(userId, filters),
+    getYearlySummary(userId, filters),
+  ]);
 
   return {
     emiTrend,
     outstandingTrend,
     categoryDistribution,
+    trackingItemDistribution,
     paidVsPending,
     yearlySummary,
   };

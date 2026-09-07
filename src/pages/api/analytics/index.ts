@@ -11,11 +11,15 @@ export default withApiAuth(async (req, res, session) => {
   }
 
   try {
-    const { year, month, type } = req.query;
+    const { year, month, type, trackingItemIds } = req.query;
     const filters = analyticsFiltersSchema.parse({
       year: typeof year === "string" ? year : undefined,
       month: typeof month === "string" ? month : undefined,
       type: typeof type === "string" ? type : undefined,
+      trackingItemIds:
+        typeof trackingItemIds === "string" || Array.isArray(trackingItemIds)
+          ? trackingItemIds
+          : undefined,
     });
     const analytics = await getAnalytics(session.user.id, filters);
     res.status(200).json(analytics);

@@ -6,6 +6,7 @@ import {
   deleteLendingTransactionRequest,
   fetchLendingContact,
   fetchLendingContacts,
+  fetchLendingSummary,
   updateLendingContactRequest,
 } from "@/lib/api/lending";
 import type {
@@ -23,6 +24,7 @@ function invalidateAll(
     queryClient.invalidateQueries({ queryKey: ["lending-contact", contactId] });
   }
   queryClient.invalidateQueries({ queryKey: ["dashboard-metrics"] });
+  queryClient.invalidateQueries({ queryKey: ["lending-summary"] });
 }
 
 export function useLendingContacts() {
@@ -30,6 +32,13 @@ export function useLendingContacts() {
     queryKey: ["lending-contacts"],
     queryFn: fetchLendingContacts,
     select: (data) => data.contacts,
+  });
+}
+
+export function useLendingSummary() {
+  return useQuery({
+    queryKey: ["lending-summary"],
+    queryFn: fetchLendingSummary,
   });
 }
 

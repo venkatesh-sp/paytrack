@@ -22,8 +22,13 @@ export const monthlyPayable = pgTable(
     userId: text("user_id")
       .notNull()
       .references(() => user.id, { onDelete: "cascade" }),
+    // "cascade" (not "set null") deliberately: a payable generated for a
+    // tracking item has no independent meaning once that item is deleted, so
+    // it — and, via their own cascading FKs, its payment_history and
+    // reminder_log rows — must go with it. Manual (non-tracking-item)
+    // payables are unaffected since their trackingItemId is already null.
     trackingItemId: uuid("tracking_item_id").references(() => trackingItem.id, {
-      onDelete: "set null",
+      onDelete: "cascade",
     }),
     source: payableSourceEnum("source").notNull(),
     category: payableCategoryEnum("category").notNull(),

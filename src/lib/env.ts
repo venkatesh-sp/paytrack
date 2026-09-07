@@ -5,11 +5,12 @@ const envSchema = z.object({
   BETTER_AUTH_SECRET: z.string().min(1, "BETTER_AUTH_SECRET is required"),
   BETTER_AUTH_URL: z.string().min(1),
   NEXT_PUBLIC_APP_URL: z.string().min(1),
-  RESEND_API_KEY: z.string().optional().default(""),
-  RESEND_FROM_EMAIL: z
-    .string()
-    .optional()
-    .default("PayTrack <notifications@yourdomain.com>"),
+  SMTP_HOST: z.string().optional().default(""),
+  SMTP_PORT: z.string().optional().default("587"),
+  SMTP_SECURE: z.string().optional().default(""),
+  SMTP_USER: z.string().optional().default(""),
+  SMTP_PASSWORD: z.string().optional().default(""),
+  SMTP_FROM: z.string().optional().default("PayTrack <notifications@yourdomain.com>"),
   INNGEST_EVENT_KEY: z.string().optional().default(""),
   INNGEST_SIGNING_KEY: z.string().optional().default(""),
   NEXT_PUBLIC_POSTHOG_KEY: z.string().optional().default(""),

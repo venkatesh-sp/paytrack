@@ -86,7 +86,12 @@ export async function createManualPayable(
 
 export async function listPayables(
   userId: string,
-  filters: { status?: string; billingPeriod?: string; category?: string } = {},
+  filters: {
+    status?: string;
+    billingPeriod?: string;
+    category?: string;
+    trackingItemId?: string;
+  } = {},
 ): Promise<MonthlyPayable[]> {
   const conditions = [eq(monthlyPayable.userId, userId)];
   if (filters.status) {
@@ -101,6 +106,9 @@ export async function listPayables(
     conditions.push(
       eq(monthlyPayable.category, filters.category as MonthlyPayable["category"]),
     );
+  }
+  if (filters.trackingItemId) {
+    conditions.push(eq(monthlyPayable.trackingItemId, filters.trackingItemId));
   }
 
   return db

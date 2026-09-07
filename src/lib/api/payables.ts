@@ -11,11 +11,13 @@ export function fetchPayables(filters?: {
   status?: string;
   month?: string;
   category?: string;
+  trackingItemId?: string;
 }) {
   const params = new URLSearchParams();
   if (filters?.status) params.set("status", filters.status);
   if (filters?.month) params.set("month", filters.month);
   if (filters?.category) params.set("category", filters.category);
+  if (filters?.trackingItemId) params.set("trackingItemId", filters.trackingItemId);
   const qs = params.toString();
   return apiFetch<{ payables: MonthlyPayable[] }>(`/api/payables${qs ? `?${qs}` : ""}`);
 }

@@ -15,7 +15,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  ExportLinkButton,
+  ImportFileButton,
+} from "@/components/data-transfer/export-import-buttons";
 import { useTrackingItems } from "@/hooks/use-tracking-items";
+import { useImportTrackingItems } from "@/hooks/use-data-transfer";
+import { trackingItemsExportUrl } from "@/lib/api/data-transfer";
 import {
   formatCurrency,
   formatDate,
@@ -33,6 +39,7 @@ const statusVariant: Record<string, "default" | "secondary" | "outline"> = {
 
 export default function TrackingItemsPage() {
   const { data: items, isLoading, isError } = useTrackingItems();
+  const importMutation = useImportTrackingItems();
 
   return (
     <DashboardShell>
@@ -40,20 +47,35 @@ export default function TrackingItemsPage() {
         <title>Tracking Items · PayTrack</title>
       </Head>
 
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-semibold tracking-tight">Tracking Items</h1>
           <p className="text-muted-foreground text-sm">
             Loans, EMIs, and credit cards you&apos;re tracking.
           </p>
         </div>
-        <Button asChild>
-          <Link href="/tracking-items/new">
-            <PlusCircle className="size-4" />
-            Add tracking item
-          </Link>
-        </Button>
+        <div className="flex flex-wrap items-center gap-2">
+          <ExportLinkButton href={trackingItemsExportUrl()} label="Export" />
+          <ImportFileButton
+            label="Import"
+            onImport={(data) => importMutation.mutateAsync(data)}
+            describeResult={(result) => {
+              const r = result as { itemsImported: number; payablesImported: number };
+              return `Imported ${r.itemsImported} tracking item(s) and ${r.payablesImported} payable(s).`;
+            }}
+          />
+          <Button asChild>
+            <Link href="/tracking-items/new">
+              <PlusCircle className="size-4" />
+              Add tracking item
+            </Link>
+          </Button>
+        </div>
       </div>
+      <p className="text-muted-foreground -mt-2 text-xs">
+        Import adds items from a PayTrack export file — it never overwrites or removes
+        existing data.
+      </p>
 
       {isLoading && (
         <div className="space-y-2">
@@ -94,10 +116,17 @@ export default function TrackingItemsPage() {
               <TableRow>
                 <TableHead>Name</TableHead>
                 <TableHead>Type</TableHead>
-                <TableHead>Status</TableHead>
+
+                <TableHead className="text-right">Principal</TableHead>
+                <TableHead className="text-right">ROI</TableHead>
+                <TableHead className="text-right">Total EMIs</TableHead>
                 <TableHead className="text-right">Monthly EMI</TableHead>
+                <TableHead className="text-right">Paid EMIs</TableHead>
+                <TableHead className="text-right">Pending EMIs</TableHead>
+                <TableHead className="text-right">Paid Amount</TableHead>
                 <TableHead className="text-right">Outstanding</TableHead>
-                <TableHead>End date</TableHead>
+                <TableHead className="text-right">End date</TableHead>
+                <TableHead>Status</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -114,21 +143,34 @@ export default function TrackingItemsPage() {
                   <TableCell className="text-muted-foreground">
                     {trackingItemTypeLabels[item.type]}
                   </TableCell>
+
+                  <TableCell className="text-right">
+                    {formatCurrency(item.principalAmount)}
+                  </TableCell>
+
+                  <TableCell className="text-right">{item.interestRate}%</TableCell>
+                  <TableCell className="text-right">{item.tenureMonths}</TableCell>
+                  <TableCell className="text-right">
+                    {formatCurrency(item.monthlyEmiAmount)}
+                  </TableCell>
+                  <TableCell className="text-right">{item.paidEmiCount}</TableCell>
+                  <TableCell className="text-right">{item.pendingEmiCount}</TableCell>
+
+                  <TableCell className="text-right">
+                    {formatCurrency(Number(item.monthlyEmiAmount) * item.paidEmiCount)}
+                  </TableCell>
+                  <TableCell className="text-right">
+                    {formatCurrency(Number(item.monthlyEmiAmount) * item.pendingEmiCount)}
+                  </TableCell>
+                  <TableCell className="text-muted-foreground text-right">
+                    {formatDate(item.endDate)}
+                  </TableCell>
                   <TableCell>
                     <StatusBadge
                       variant={statusVariant[item.status] ?? "default"}
                       icon={trackingItemStatusIcons[item.status] ?? CircleDot}
                       label={trackingItemStatusLabels[item.status]}
                     />
-                  </TableCell>
-                  <TableCell className="text-right">
-                    {formatCurrency(item.monthlyEmiAmount)}
-                  </TableCell>
-                  <TableCell className="text-right">
-                    {formatCurrency(item.outstandingAmount)}
-                  </TableCell>
-                  <TableCell className="text-muted-foreground">
-                    {formatDate(item.endDate)}
                   </TableCell>
                 </TableRow>
               ))}

@@ -39,6 +39,9 @@ export function DatePicker({
           mode="single"
           selected={date}
           onSelect={(d) => d && onChange(format(d, "yyyy-MM-dd"))}
+          captionLayout="dropdown"
+          startMonth={new Date(new Date().getFullYear() - 80, 0)}
+          endMonth={new Date(new Date().getFullYear() + 15, 11)}
         />
       </PopoverContent>
     </Popover>

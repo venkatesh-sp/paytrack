@@ -8,11 +8,12 @@ export default withApiAuth(async (req, res, session) => {
 
   try {
     if (req.method === "GET") {
-      const { status, month, category } = req.query;
+      const { status, month, category, trackingItemId } = req.query;
       const payables = await listPayables(userId, {
         status: typeof status === "string" ? status : undefined,
         billingPeriod: typeof month === "string" ? month : undefined,
         category: typeof category === "string" ? category : undefined,
+        trackingItemId: typeof trackingItemId === "string" ? trackingItemId : undefined,
       });
       res.status(200).json({ payables });
       return;

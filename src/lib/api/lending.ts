@@ -5,9 +5,14 @@ import type {
   UpdateLendingContactInput,
 } from "@/lib/validations/lending";
 import type { LendingContact, LendingTransaction } from "@/db/schema";
+import type { LendingSummary } from "@/server/services/lending";
 
 export function fetchLendingContacts() {
   return apiFetch<{ contacts: LendingContact[] }>("/api/lending/contacts");
+}
+
+export function fetchLendingSummary() {
+  return apiFetch<LendingSummary>("/api/lending/summary");
 }
 
 export function fetchLendingContact(id: string) {

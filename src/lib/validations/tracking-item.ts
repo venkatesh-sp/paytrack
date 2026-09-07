@@ -16,6 +16,12 @@ const moneyString = z
   .regex(/^\d+(\.\d{1,2})?$/, "Enter a valid amount")
   .refine((v) => Number(v) > 0, "Must be greater than 0");
 
+const nonNegativeMoneyString = z
+  .string()
+  .trim()
+  .regex(/^\d+(\.\d{1,2})?$/, "Enter a valid amount")
+  .refine((v) => Number(v) >= 0, "Cannot be negative");
+
 const rateString = z
   .string()
   .trim()
@@ -49,13 +55,15 @@ export const createTrackingItemSchema = z.object({
   emiDay: intString(1, 31, "EMI day"),
   startDate: z.string().min(1, "Start date is required"),
   notes: z.string().trim().max(2000).optional().or(z.literal("")),
+  outstandingAmount: nonNegativeMoneyString.optional(),
+  paidBillingPeriods: z.array(z.string().regex(/^\d{4}-\d{2}$/)).optional(),
 });
 
 export type CreateTrackingItemInput = z.infer<typeof createTrackingItemSchema>;
 
 export const updateTrackingItemSchema = createTrackingItemSchema.partial().extend({
   status: z.enum(trackingItemStatusValues).optional(),
-  outstandingAmount: moneyString.optional(),
+  outstandingAmount: nonNegativeMoneyString.optional(),
 });
 
 export type UpdateTrackingItemInput = z.infer<typeof updateTrackingItemSchema>;

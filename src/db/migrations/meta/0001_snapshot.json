@@ -1,6 +1,6 @@
 {
-  "id": "061e3be3-22d9-4e27-9b07-9c858d97b501",
-  "prevId": "8baf87f5-2e21-4dac-afbc-4bec874c5bb1",
+  "id": "b7aa67c0-6da3-4487-a858-6ff13376e7fa",
+  "prevId": "b838a82f-db61-4b3e-854c-d4183ec0a473",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -106,10 +106,10 @@
         }
       },
       "foreignKeys": {
-        "account_user_id_user_id_fk": {
-          "name": "account_user_id_user_id_fk",
+        "account_user_id_users_id_fk": {
+          "name": "account_user_id_users_id_fk",
           "tableFrom": "account",
-          "tableTo": "user",
+          "tableTo": "users",
           "columnsFrom": [
             "user_id"
           ],
@@ -198,10 +198,10 @@
         }
       },
       "foreignKeys": {
-        "session_user_id_user_id_fk": {
-          "name": "session_user_id_user_id_fk",
+        "session_user_id_users_id_fk": {
+          "name": "session_user_id_users_id_fk",
           "tableFrom": "session",
-          "tableTo": "user",
+          "tableTo": "users",
           "columnsFrom": [
             "user_id"
           ],
@@ -226,8 +226,8 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "public.user": {
-      "name": "user",
+    "public.users": {
+      "name": "users",
       "schema": "",
       "columns": {
         "id": {
@@ -298,8 +298,8 @@
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "user_email_unique": {
-          "name": "user_email_unique",
+        "users_email_unique": {
+          "name": "users_email_unique",
           "nullsNotDistinct": false,
           "columns": [
             "email"
@@ -556,10 +556,10 @@
         }
       },
       "foreignKeys": {
-        "tracking_item_user_id_user_id_fk": {
-          "name": "tracking_item_user_id_user_id_fk",
+        "tracking_item_user_id_users_id_fk": {
+          "name": "tracking_item_user_id_users_id_fk",
           "tableFrom": "tracking_item",
-          "tableTo": "user",
+          "tableTo": "users",
           "columnsFrom": [
             "user_id"
           ],
@@ -761,10 +761,10 @@
         }
       },
       "foreignKeys": {
-        "monthly_payable_user_id_user_id_fk": {
-          "name": "monthly_payable_user_id_user_id_fk",
+        "monthly_payable_user_id_users_id_fk": {
+          "name": "monthly_payable_user_id_users_id_fk",
           "tableFrom": "monthly_payable",
-          "tableTo": "user",
+          "tableTo": "users",
           "columnsFrom": [
             "user_id"
           ],
@@ -927,10 +927,10 @@
         }
       },
       "foreignKeys": {
-        "payment_history_user_id_user_id_fk": {
-          "name": "payment_history_user_id_user_id_fk",
+        "payment_history_user_id_users_id_fk": {
+          "name": "payment_history_user_id_users_id_fk",
           "tableFrom": "payment_history",
-          "tableTo": "user",
+          "tableTo": "users",
           "columnsFrom": [
             "user_id"
           ],
@@ -1093,10 +1093,10 @@
         }
       },
       "foreignKeys": {
-        "notification_preference_user_id_user_id_fk": {
-          "name": "notification_preference_user_id_user_id_fk",
+        "notification_preference_user_id_users_id_fk": {
+          "name": "notification_preference_user_id_users_id_fk",
           "tableFrom": "notification_preference",
-          "tableTo": "user",
+          "tableTo": "users",
           "columnsFrom": [
             "user_id"
           ],
@@ -1226,10 +1226,10 @@
         }
       },
       "foreignKeys": {
-        "reminder_log_user_id_user_id_fk": {
-          "name": "reminder_log_user_id_user_id_fk",
+        "reminder_log_user_id_users_id_fk": {
+          "name": "reminder_log_user_id_users_id_fk",
           "tableFrom": "reminder_log",
-          "tableTo": "user",
+          "tableTo": "users",
           "columnsFrom": [
             "user_id"
           ],
@@ -1334,10 +1334,10 @@
         }
       },
       "foreignKeys": {
-        "lending_contact_user_id_user_id_fk": {
-          "name": "lending_contact_user_id_user_id_fk",
+        "lending_contact_user_id_users_id_fk": {
+          "name": "lending_contact_user_id_users_id_fk",
           "tableFrom": "lending_contact",
-          "tableTo": "user",
+          "tableTo": "users",
           "columnsFrom": [
             "user_id"
           ],
@@ -1443,10 +1443,10 @@
         }
       },
       "foreignKeys": {
-        "lending_transaction_user_id_user_id_fk": {
-          "name": "lending_transaction_user_id_user_id_fk",
+        "lending_transaction_user_id_users_id_fk": {
+          "name": "lending_transaction_user_id_users_id_fk",
           "tableFrom": "lending_transaction",
-          "tableTo": "user",
+          "tableTo": "users",
           "columnsFrom": [
             "user_id"
           ],

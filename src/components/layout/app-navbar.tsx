@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { useQueryClient } from "@tanstack/react-query";
 import { LogOut, Settings, User as UserIcon } from "lucide-react";
 import { toast } from "sonner";
 
@@ -52,9 +53,14 @@ export function AppNavbar() {
   const router = useRouter();
   const title = useCurrentPageTitle();
   const { data } = authClient.useSession();
+  const queryClient = useQueryClient();
 
   async function handleLogout() {
     await authClient.signOut();
+    // Drop every cached query — none of it is scoped by user id, so leaving
+    // it in place would let the next person who logs in on this device see
+    // this account's data until their first refetch overwrites it.
+    queryClient.clear();
     toast.success("Signed out");
     router.push("/login");
   }

@@ -1,8 +1,17 @@
 import Head from "next/head";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { toast } from "sonner";
 
 import { DashboardShell } from "@/components/layout/dashboard-shell";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { TrackingItemForm } from "@/components/tracking-items/tracking-item-form";
@@ -36,6 +45,28 @@ export default function EditTrackingItemPage() {
         </title>
       </Head>
 
+      <Breadcrumb>
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink asChild>
+              <Link href="/tracking-items">Tracking items</Link>
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbLink asChild>
+              <Link href={id ? `/tracking-items/${id}` : "/tracking-items"}>
+                {item ? item.name : "…"}
+              </Link>
+            </BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbPage>Edit</BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
+
       <div>
         <h1 className="text-2xl font-semibold tracking-tight">Edit tracking item</h1>
       </div>
@@ -60,9 +91,14 @@ export default function EditTrackingItemPage() {
                 emiDay: String(item.emiDay),
                 startDate: item.startDate,
                 notes: item.notes ?? "",
+                outstandingAmount: item.outstandingAmount,
               }}
               onSubmit={handleSubmit}
+              onCancel={() => router.push(`/tracking-items/${item.id}`)}
               submitLabel="Save changes"
+              mode="edit"
+              trackingItemId={item.id}
+              paidEmiCount={item.paidEmiCount}
             />
           )}
         </CardContent>

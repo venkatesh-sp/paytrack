@@ -24,15 +24,20 @@ function invalidateAll(queryClient: ReturnType<typeof useQueryClient>) {
   queryClient.invalidateQueries({ queryKey: ["dashboard-metrics"] });
 }
 
-export function usePayables(filters?: {
-  status?: string;
-  month?: string;
-  category?: string;
-}) {
+export function usePayables(
+  filters?: {
+    status?: string;
+    month?: string;
+    category?: string;
+    trackingItemId?: string;
+  },
+  options?: { enabled?: boolean },
+) {
   return useQuery({
     queryKey: ["payables", filters ?? {}],
     queryFn: () => fetchPayables(filters),
     select: (data) => data.payables,
+    enabled: options?.enabled ?? true,
   });
 }
 
@@ -45,11 +50,15 @@ export function usePayable(id: string | undefined) {
   });
 }
 
-export function usePaymentHistory(filters?: PaymentHistoryFilters) {
+export function usePaymentHistory(
+  filters?: PaymentHistoryFilters,
+  options?: { enabled?: boolean },
+) {
   return useQuery({
     queryKey: ["payment-history", filters ?? {}],
     queryFn: () => fetchPaymentHistory(filters),
     select: (data) => data.history,
+    enabled: options?.enabled ?? true,
   });
 }
 
