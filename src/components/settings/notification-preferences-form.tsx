@@ -1,3 +1,4 @@
+import { useId } from "react";
 import { toast } from "sonner";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Switch } from "@/components/ui/switch";
@@ -25,16 +26,25 @@ function Row({
   disabled?: boolean;
   comingSoon?: boolean;
 }) {
+  const switchId = useId();
   return (
     <div className="flex items-center justify-between gap-4 py-3">
-      <div>
-        <div className="flex items-center gap-2">
-          <Label className="text-sm font-medium">{label}</Label>
+      <Label
+        htmlFor={switchId}
+        className="flex min-h-11 flex-1 cursor-pointer flex-col items-start justify-center gap-1"
+      >
+        <span className="flex items-center gap-2">
+          <span className="text-sm font-medium">{label}</span>
           {comingSoon && <Badge variant="outline">Coming soon</Badge>}
-        </div>
-        <p className="text-muted-foreground text-sm">{description}</p>
-      </div>
-      <Switch checked={checked} onCheckedChange={onCheckedChange} disabled={disabled} />
+        </span>
+        <span className="text-muted-foreground text-sm font-normal">{description}</span>
+      </Label>
+      <Switch
+        id={switchId}
+        checked={checked}
+        onCheckedChange={onCheckedChange}
+        disabled={disabled}
+      />
     </div>
   );
 }

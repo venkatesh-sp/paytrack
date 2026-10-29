@@ -110,7 +110,50 @@ export default function TrackingItemsPage() {
       )}
 
       {!isLoading && !isError && items && items.length > 0 && (
-        <div className="overflow-hidden rounded-xl border">
+        <div className="space-y-3 md:hidden">
+          {items.map((item) => (
+            <Link
+              key={item.id}
+              href={`/tracking-items/${item.id}`}
+              className="active:bg-muted/50 block space-y-3 rounded-xl border p-4"
+            >
+              <div className="flex items-start justify-between gap-3">
+                <div className="min-w-0">
+                  <p className="truncate font-medium">{item.name}</p>
+                  <p className="text-muted-foreground text-xs">
+                    {trackingItemTypeLabels[item.type]}
+                    {item.interestRate ? ` · ${item.interestRate}%` : ""}
+                  </p>
+                </div>
+                <StatusBadge
+                  variant={statusVariant[item.status] ?? "default"}
+                  icon={trackingItemStatusIcons[item.status] ?? CircleDot}
+                  label={trackingItemStatusLabels[item.status]}
+                />
+              </div>
+              <div className="grid grid-cols-3 gap-2 text-sm">
+                <div>
+                  <p className="text-muted-foreground text-xs">Monthly EMI</p>
+                  <p className="font-medium">{formatCurrency(item.monthlyEmiAmount)}</p>
+                </div>
+                <div>
+                  <p className="text-muted-foreground text-xs">Paid / Pending</p>
+                  <p className="font-medium">
+                    {item.paidEmiCount} / {item.pendingEmiCount}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-muted-foreground text-xs">Outstanding</p>
+                  <p className="font-medium">{formatCurrency(item.outstandingAmount)}</p>
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
+      )}
+
+      {!isLoading && !isError && items && items.length > 0 && (
+        <div className="hidden overflow-hidden rounded-xl border md:block">
           <Table>
             <TableHeader>
               <TableRow>

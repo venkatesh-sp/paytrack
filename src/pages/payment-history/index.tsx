@@ -62,7 +62,37 @@ export default function PaymentHistoryPage() {
       )}
 
       {!isLoading && !isError && history && history.length > 0 && (
-        <div className="overflow-hidden rounded-xl border">
+        <div className="space-y-3 md:hidden">
+          {history.map((entry) => (
+            <div key={entry.id} className="space-y-2 rounded-xl border p-4">
+              <div className="flex items-start justify-between gap-3">
+                <div className="min-w-0">
+                  <p className="truncate font-medium">{entry.payableTitle}</p>
+                  <p className="text-muted-foreground text-xs">
+                    {payableCategoryLabels[entry.payableCategory]} ·{" "}
+                    {formatDate(entry.paymentDate)}
+                  </p>
+                </div>
+                <p className="shrink-0 font-semibold">{formatCurrency(entry.amount)}</p>
+              </div>
+              <div className="text-muted-foreground flex items-center justify-between text-xs">
+                {entry.paymentMethod ? (
+                  <Badge variant="outline">{entry.paymentMethod}</Badge>
+                ) : (
+                  <span>—</span>
+                )}
+                <span>
+                  Outstanding after:{" "}
+                  {entry.outstandingAfter ? formatCurrency(entry.outstandingAfter) : "—"}
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {!isLoading && !isError && history && history.length > 0 && (
+        <div className="hidden overflow-hidden rounded-xl border md:block">
           <Table>
             <TableHeader>
               <TableRow>

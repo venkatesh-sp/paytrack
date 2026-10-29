@@ -152,7 +152,52 @@ export default function PayablesPage() {
       )}
 
       {!isLoading && !isError && payables && payables.length > 0 && (
-        <div className="overflow-hidden rounded-xl border">
+        <div className="space-y-3 md:hidden">
+          {payables.map((payable) => {
+            const status = effectiveStatus(payable.status, payable.dueDate);
+            return (
+              <div key={payable.id} className="space-y-3 rounded-xl border p-4">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="min-w-0">
+                    <p className="truncate font-medium">{payable.title}</p>
+                    <p className="text-muted-foreground text-xs">
+                      {payableCategoryLabels[payable.category]} ·{" "}
+                      {formatDate(payable.dueDate)}
+                    </p>
+                  </div>
+                  <p className="shrink-0 font-semibold">
+                    {formatCurrency(payable.amount)}
+                  </p>
+                </div>
+                <div className="flex items-center justify-between gap-3">
+                  <StatusBadge
+                    variant={statusVariant[status] ?? "secondary"}
+                    icon={payableStatusIcons[status] ?? payableStatusIcons.pending}
+                    label={
+                      status === "overdue"
+                        ? "Overdue"
+                        : payableStatusLabels[payable.status]
+                    }
+                  />
+                  {payable.status !== "paid" && (
+                    <MarkPaidDialog
+                      payable={payable}
+                      trigger={
+                        <Button size="sm" variant="outline" className="h-10 px-4">
+                          Mark paid
+                        </Button>
+                      }
+                    />
+                  )}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+
+      {!isLoading && !isError && payables && payables.length > 0 && (
+        <div className="hidden overflow-hidden rounded-xl border md:block">
           <Table>
             <TableHeader>
               <TableRow>

@@ -5,3 +5,5 @@ build
 src/db/migrations
 yarn.lock
 tsconfig.tsbuildinfo
+android/
+ios/
